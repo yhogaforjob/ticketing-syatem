@@ -61,3 +61,10 @@ npx cap open android
 
 - Jangan menaruh kunci agent di kode atau di repo. Kunci dimasukkan lewat layar masuk.
 - URL webhook ada di kode. Webhook tetap aman selama kunci agent rahasia, tetapi jika repo dibuat publik, ganti kunci bila pernah bocor.
+
+## Pembaruan dalam aplikasi
+
+Setiap push ke `main` membangun APK baru (nomor build = nomor run GitHub Actions) dan memperbarui rilis
+`apk-terbaru`. Aplikasi yang sudah terpasang mengecek rilis itu; kalau nomor build lebih baru, lonceng
+bertitik dan tombol **Unduh dan pasang** mengunduh APK lalu membuka layar pemasangan Android.
+Semua build ditandatangani keystore tetap di `signing/`, jadi pembaruan menimpa versi lama.
