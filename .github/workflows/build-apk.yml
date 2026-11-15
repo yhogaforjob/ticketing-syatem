@@ -38,6 +38,11 @@ jobs:
       - name: Terapkan ikon dan pengaturan
         run: ./scripts/patch-android.sh
 
+      - name: Cap nomor build (untuk lonceng pembaruan)
+        run: |
+          sed -i "s/const BUILD = 0;/const BUILD = ${{ github.run_number }};/" www/index.html
+          grep -q "const BUILD = ${{ github.run_number }};" www/index.html
+
       - name: Sinkronkan aplikasi web ke Android
         run: npx cap sync android
 
@@ -61,6 +66,7 @@ jobs:
           tag_name: apk-terbaru
           name: APK terbaru
           body: |
+            build: ${{ github.run_number }}
             APK debug Tiket Nuvera, dibuat otomatis dari commit ${{ github.sha }}.
             Unduh `tiket-nuvera.apk` di bawah, lalu pasang di Android (izinkan "install dari sumber ini" bila diminta).
           files: tiket-nuvera.apk
