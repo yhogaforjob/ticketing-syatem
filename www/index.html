@@ -21,12 +21,62 @@ body{background:var(--bg);color:var(--tx);font-family:'Inter',system-ui,-apple-s
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
 svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.app{width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg)}
-@media (min-width:520px){
-  body{align-items:center;padding:24px;background:#E4EEE8}
-  .app{height:min(860px,calc(100dvh - 48px));border-radius:36px;box-shadow:0 30px 70px rgba(10,77,67,.25)}
-}
+.app{width:100%;max-width:1440px;height:100dvh;display:flex;flex-direction:row;position:relative;overflow:hidden;background:var(--bg)}
+.left{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
 #view{display:flex;flex-direction:column;flex:1;min-height:0}
+.pane{display:none;flex:1;min-width:0;min-height:0;flex-direction:column;background:var(--bg)}
+.ph{flex:1;display:grid;place-items:center;text-align:center;color:var(--mu);padding:24px;line-height:1.55;font-weight:500}
+.ph svg{width:44px;height:44px;margin:0 auto 12px;color:var(--pri);opacity:.55;display:block}
+.ph b{display:block;color:var(--tx);font-size:16px;margin-bottom:2px}
+.dbody.ctr{max-width:520px;margin-left:auto;margin-right:auto;width:100%}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px;align-items:start}
+.dgrid .box{margin-bottom:0}
+
+/* tablet dan layar lebar: daftar di kiri, detail atau dashboard di kanan */
+@media (min-width:768px){
+  .app.wide .left{flex:none;width:clamp(330px,34vw,420px);border-right:1px solid var(--ln)}
+  .app.wide .pane{display:flex}
+  .app.wide .back{display:none}
+  .app.wide .card.sel{outline:2px solid var(--pri);outline-offset:-2px}
+  .app.wide .hero{padding-top:20px}
+  .pane .thread{padding:14px max(16px,calc((100% - 760px) / 2))}
+  .pane .composer{padding-left:max(16px,calc((100% - 760px) / 2));padding-right:max(16px,calc((100% - 760px) / 2))}
+  .pane .mrow{padding-left:max(16px,calc((100% - 760px) / 2));padding-right:max(16px,calc((100% - 760px) / 2))}
+  .pane .panel{margin:-26px auto 0;width:calc(100% - 32px);max-width:728px}
+  .pane .dbody{padding:0 max(16px,calc((100% - 980px) / 2)) 16px}
+  .msg{max-width:min(82%,560px)}
+  body{background:#E4EEE8}
+  .app.wide .tabs{gap:2px;padding:4px}
+  .app.wide .tab{font-size:11.5px;padding:9px 2px;gap:4px;white-space:nowrap}
+  .app.wide .tab .n{min-width:18px;height:18px;padding:0 5px;font-size:10.5px}
+}
+/* layar pendek (HP landscape): header lebih ringkas */
+@media (max-height:520px){
+  .hero{padding-top:12px;padding-bottom:38px}
+  .hero h1{font-size:20px}
+  .hero p{display:none}
+  .pull{margin-top:-24px}
+  .panel{margin-top:-22px}
+  .panel div{padding:5px 4px}
+  .tile{padding:8px}
+  .tile b{font-size:20px}
+  .msg{padding:8px 12px}
+}
+/* HP kecil (lebar 360px ke bawah) */
+@media (max-width:360px){
+  .tabs{gap:2px;padding:4px}
+  .tab{font-size:11.5px;padding:9px 2px;gap:4px;white-space:nowrap}
+  .tab .n{min-width:18px;height:18px;padding:0 5px;font-size:10.5px}
+  .hero{padding-left:16px;padding-right:16px}
+  .hero h1{font-size:21px}
+  .pull{margin-left:12px;margin-right:12px}
+  .list{padding-left:12px;padding-right:12px}
+  .chips{padding-left:12px}
+  .panel b{font-size:15px}
+  .tile b{font-size:22px}
+  .name{font-size:14px}
+  .nav button{padding:9px 4px;font-size:13px}
+}
 .screen{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 .screen::-webkit-scrollbar{display:none}
 
@@ -160,11 +210,14 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 </head>
 <body>
 <div class="app" id="app">
+  <div class="left">
   <div id="view"></div>
   <nav class="nav" id="nav" aria-label="Navigasi utama">
     <button data-nav="list"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Tiket</button>
     <button data-nav="dash"><svg class="i" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Dashboard</button>
   </nav>
+  </div>
+  <div class="pane" id="pane"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
@@ -293,6 +346,9 @@ function save() { if (MODE !== 'demo') return; try { localStorage.setItem(KEY, J
 let S = { next: 1, tickets: [] };
 let view = 'list', tab = 'open', src = 'all', per = '7', current = null;
 const $ = s => document.querySelector(s);
+const isWide = () => $('#app').classList.contains('wide');
+const rightEl = () => isWide() ? $('#pane') : $('#view');
+const PH = '<div class="ph"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><b>Pilih tiket</b>Percakapan dan detailnya tampil di sini.</div></div>';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const p2 = n => String(n).padStart(2, '0');
 const find = id => S.tickets.find(t => t.id === id);
@@ -353,7 +409,7 @@ function setConn(ok) {
   conn = ok;
   if (MODE !== 'live') return;
   toast(ok ? 'Tersambung kembali' : 'Koneksi terputus, mencoba lagi…');
-  if (view === 'list' || view === 'dash') renderKeepScroll();
+  if (isWide()) renderListKeep(); else if (view === 'list' || view === 'dash') renderKeepScroll();
 }
 function renderKeepScroll() {
   const sc = document.querySelector('.screen'), y = sc ? sc.scrollTop : 0;
@@ -408,7 +464,7 @@ async function login() {
 }
 
 async function refreshList() {
-  if (MODE !== 'live' || listBusy || document.hidden || !(view === 'list' || view === 'dash')) return;
+  if (MODE !== 'live' || listBusy || document.hidden || !(isWide() || view === 'list' || view === 'dash')) return;
   listBusy = true;
   try {
     const j = await api('list');
@@ -425,7 +481,7 @@ async function refreshList() {
     const sig = j.tickets.map(r => [r.ticket_id, r.status, r.category, r.last_message_at, r.last_text].join('|')).join('~');
     const changed = sig !== listSig || !loaded;
     S.tickets = next; listSig = sig; loaded = true;
-    if (changed && (view === 'list' || view === 'dash')) renderKeepScroll();
+    if (changed) { if (isWide()) { renderListKeep(); if (view === 'dash') renderDash(); } else if (view === 'list' || view === 'dash') renderKeepScroll(); }
     if (fresh.length) {
       toast(fresh.length === 1 ? `Tiket baru dari ${appOf(fresh[0].app).name} · ${catN(fresh[0].cat)}` : `${fresh.length} tiket baru masuk`);
       try { navigator.vibrate && navigator.vibrate(120); } catch (e) {}
@@ -441,7 +497,7 @@ function drawThread(force) {
   if (near || force) th.scrollTop = th.scrollHeight;
 }
 async function pollDetail() {
-  if (MODE !== 'live' || view !== 'detail' || detBusy || document.hidden) return;
+  if (MODE !== 'live' || !detailVisible() || detBusy || document.hidden) return;
   const t = find(current); if (!t) return;
   detBusy = true;
   try {
@@ -450,7 +506,7 @@ async function pollDetail() {
     t.mv = j.v;
     const server = j.messages.map(m => ({ id: m.id, f: m.sender === 'agent' ? 'a' : 'c', t: m.text, at: ts(m.at) || Date.now() }));
     t.msgs = server.concat(t.msgs.filter(m => m.pending));
-    if (view === 'detail' && current === t.id) drawThread();
+    if (detailVisible() && current === t.id) drawThread();
   } catch (e) { /* ditangani setConn */ } finally { detBusy = false; }
 }
 
@@ -467,7 +523,7 @@ function openLive(id) {
     applyRow(t, j.ticket); toast(`${t.id} otomatis menjadi In Progress`);
   }).catch(() => {
     t.status = prev.status; t.inProgressAt = prev.ip; toast('Gagal membuka tiket, periksa koneksi');
-    if (view === 'detail' && current === id) renderDetail();
+    if (detailVisible() && current === id) renderDetail();
   }).finally(() => busy.delete(id));
 }
 async function solveLive(t) {
@@ -477,7 +533,8 @@ async function solveLive(t) {
     const j = await api('solve', { ticket: t.id });
     if (!j.ok) throw new Error(j.code);
     applyRow(t, j.ticket); toast(`${t.id} selesai · total ${fmtLong(t.resolvedAt - t.createdAt)}`);
-    if (view === 'detail' && current === t.id) renderDetail();
+    if (isWide()) { tab = t.status; renderListKeep(); }
+    if (detailVisible() && current === t.id) renderDetail();
   } catch (e) { if (b) b.disabled = false; toast('Gagal menandai selesai, coba lagi'); }
   finally { busy.delete(t.id); }
 }
@@ -491,7 +548,7 @@ async function replyLive(t, text) {
     m.pending = false; if (j.message) m.id = j.message.message_id;
     applyRow(t, j.ticket); t.mv = undefined;
   } catch (e) {
-    t.msgs = t.msgs.filter(x => x !== m); if (view === 'detail' && current === t.id) drawThread();
+    t.msgs = t.msgs.filter(x => x !== m); if (detailVisible() && current === t.id) drawThread();
     const i = $('#reply'); if (i && !i.value) i.value = text;
     toast(e.message === 'resolved' ? 'Tiket ini sudah selesai' : 'Pesan gagal terkirim, coba lagi');
     return;
@@ -507,13 +564,13 @@ async function catLive(t, k) {
     applyRow(t, j.ticket); toast('Kategori diubah ke ' + catN(k));
   } catch (e) { t.cat = old.cat; t.tags = [old.cat]; t.manual = old.manual; toast('Gagal mengubah kategori'); }
   finally { busy.delete(t.id); }
-  if (view === 'detail' && current === t.id) renderDetail();
+  if (detailVisible() && current === t.id) renderDetail();
 }
 
 function renderLogin() {
   $('#view').innerHTML = `<div class="screen">
     <div class="hero" style="padding-bottom:70px"><span class="cap">Nuvera Helpdesk</span><h1>Masuk Agent</h1><p>Hubungkan aplikasi ke sistem tiket.</p></div>
-    <div class="dbody" style="margin-top:-40px"><div class="box">
+    <div class="dbody ctr" style="margin-top:-40px"><div class="box">
       <label class="hint" for="lg-name" style="font-weight:700">Nama agent</label>
       <div class="cin" style="margin:6px 0 14px"><input id="lg-name" type="text" autocomplete="off" placeholder="Contoh: Yhoga"></div>
       <label class="hint" for="lg-key" style="font-weight:700">Kunci agent</label>
@@ -526,7 +583,7 @@ function renderLogin() {
 function renderBoot(msg, retry) {
   $('#view').innerHTML = `<div class="screen">
     <div class="hero" style="padding-bottom:70px"><span class="cap">Nuvera Helpdesk</span><h1>Tiket Customer</h1><p>${esc(msg)}</p></div>
-    ${retry ? '<div class="dbody" style="margin-top:-30px"><button class="solve" type="button" data-act="retry">Coba lagi</button><button class="demo" style="margin-top:14px" data-act="logout">Keluar</button></div>' : ''}
+    ${retry ? '<div class="dbody ctr" style="margin-top:-30px"><button class="solve" type="button" data-act="retry">Coba lagi</button><button class="demo" style="margin-top:14px" data-act="logout">Keluar</button></div>' : ''}
   </div>`;
 }
 
@@ -540,7 +597,7 @@ function card(t) {
   const d = durs(t, Date.now()), last = t.msgs[t.msgs.length - 1];
   const kind = t.status === 'open' ? 'open' : t.status === 'progress' ? 'prog' : 'total';
   const lbl = t.status === 'open' ? 'menunggu' : t.status === 'progress' ? 'ditangani' : 'total';
-  return `<button class="card" data-open="${t.id}" aria-label="Tiket ${t.id} dari ${esc(t.cust)}, sumber ${esc(appOf(t.app).name)}, ${STATUS[t.status]}">
+  return `<button class="card${isWide() && view !== 'dash' && t.id === current ? ' sel' : ''}" data-open="${t.id}" aria-label="Tiket ${t.id} dari ${esc(t.cust)}, sumber ${esc(appOf(t.app).name)}, ${STATUS[t.status]}">
     <div class="r1">${srcPill(t.app)}${badge(t.status)}</div>
     <div class="name">${esc(t.cust)}</div><div class="meta">${t.id} · masuk ${when(t.createdAt)}</div>
     <p class="snip">${esc(last ? last.t : (t.snip || ''))}</p>
@@ -566,7 +623,8 @@ function renderList() {
 }
 
 function renderDetail() {
-  const t = find(current); if (!t) { go('list'); return; }
+  const t = find(current);
+  if (!t) { if (isWide()) { $('#pane').innerHTML = PH; return; } go('list'); return; }
   const d = durs(t, Date.now());
   let foot = '';
   if (t.status === 'progress') {
@@ -579,7 +637,7 @@ function renderDetail() {
   const opts = CAT_ORDER.map(k => `<option value="${esc(k)}"${k === t.cat ? ' selected' : ''}>${esc(catN(k))}</option>`).join('');
   const bits = MODE === 'live' ? [t.contact && 'Kontak ' + t.contact, t.biz, t.plan && '(' + t.plan + ')', t.ver && 'v' + t.ver, t.os].filter(Boolean) : [];
   const info = bits.length ? `<div class="mrow" style="padding-top:8px"><span class="hint">${esc(bits.join(' · '))}</span></div>` : '';
-  $('#view').innerHTML = `<div class="hero" style="padding-bottom:42px"><div class="dh"><button class="back" data-nav="list" aria-label="Kembali ke daftar"><svg class="i" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="m15 18-6-6 6-6"/></svg></button>
+  rightEl().innerHTML = `<div class="hero" style="padding-bottom:42px"><div class="dh"><button class="back" data-nav="list" aria-label="Kembali ke daftar"><svg class="i" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="m15 18-6-6 6-6"/></svg></button>
       <div class="grow"><div class="name">${esc(t.cust)}</div><div class="meta">${t.id} · masuk ${when(t.createdAt)}</div></div>${badge(t.status)}</div></div>
     <div class="panel"><div><small>Open</small><b data-t="${t.id}:open">${fmt(d.open)}</b></div><div><small>In Progress</small><b data-t="${t.id}:prog">${fmt(d.prog)}</b></div><div class="${t.status === 'resolved' ? 'hl' : ''}"><small>Total</small><b data-t="${t.id}:total">${fmt(d.total)}</b></div></div>
     <div class="mrow">${srcPill(t.app)}<label class="catsel"><svg class="f" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4m0 0h11l-2 4 2 4H5"/></svg><select data-catsel aria-label="Kategori komplain">${opts}</select></label><span class="hint">${t.manual ? 'diubah manual' : 'dikenali otomatis'}</span></div>
@@ -611,11 +669,12 @@ function renderDash() {
     return `<div class="ap"><div class="t">${srcPill(k)}<b>${a.length}<span style="font-size:12px;font-weight:600;color:var(--mu)"> tiket</span></b></div>
       <div class="m">${top.length ? 'Terbanyak:' + top.map(([ck, n]) => `<span class="flag">${FLAG}${catN(ck)} · ${n}</span>`).join('') : 'Belum ada komplain'}</div></div>`;
   }).join('');
-  $('#view').innerHTML = `<div class="screen">
+  rightEl().innerHTML = `<div class="screen">
     <div class="hero"><div class="row"><div class="grow"><span class="cap">Nuvera Helpdesk</span><h1>Dashboard</h1><p>Ringkasan semua aplikasi</p></div></div></div>
     <div class="dbody" style="margin-top:-26px">
     <div class="seg" role="group" aria-label="Periode"><button data-per="1" aria-pressed="${per === '1'}">24 jam</button><button data-per="7" aria-pressed="${per === '7'}">7 hari</button></div>
     <div class="tiles"><div class="tile t-open"><b>${c('open')}</b><small>Open</small></div><div class="tile t-progress"><b>${c('progress')}</b><small>In Progress</small></div><div class="tile t-resolved"><b>${c('resolved')}</b><small>Resolved</small></div></div>
+    <div class="dgrid">
     <div class="box"><h2>Tren komplain</h2><p class="sub">${plabel} · dibanding ${pprev}</p>
       <div class="insight"><svg class="i" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>${insight}</span></div>
       ${rows.length ? rows.map(r => `<div class="tr"><div class="lbl">${FLAG}${catN(r.k)}</div><div class="num">${r.n}${delta(r)}</div><div class="trk"><i style="width:${Math.max(4, r.n / maxN * 100)}%"></i></div></div>`).join('') : '<div class="empty">Belum ada komplain di periode ini.</div>'}</div>
@@ -624,19 +683,32 @@ function renderDash() {
       <div class="stat"><span>Rata-rata total selesai</span><b>${fmtLong(avg(res.map(t => t.resolvedAt - t.createdAt)))}</b></div>
       <div class="stat"><span>Rata-rata menunggu dibuka</span><b>${fmtLong(avg(withIp.map(t => t.inProgressAt - t.createdAt)))}</b></div>
       <div class="stat"><span>Open terlama saat ini</span><b data-longest>${longest == null ? '—' : fmtLong(longest)}</b></div></div>
+    </div>
     ${MODE === 'demo' ? '<p class="fine">Data di mode demo hanya contoh dan tersimpan di perangkat ini.</p><button class="demo" data-act="reset">Reset data demo</button>' : `<p class="fine">Masuk sebagai ${esc(CFG.agent)}. Angka dihitung dari semua tiket di sheet.</p>`}
     <button class="demo" data-act="logout">${MODE === 'demo' ? 'Keluar dari demo' : 'Keluar'}</button></div>
   </div>`;
 }
 
-function render() {
-  $('#nav').style.display = (view === 'detail' || view === 'login' || view === 'boot') ? 'none' : 'flex';
-  $('#nav').querySelectorAll('button').forEach(b => b.removeAttribute('aria-current'));
-  if (view === 'list' || view === 'dash') $(`#nav [data-nav="${view}"]`).setAttribute('aria-current', 'page');
-  if (view === 'list') renderList(); else if (view === 'dash') renderDash(); else if (view === 'login') renderLogin();
-  else if (view === 'boot') renderBoot('Menyambung ke server…', false); else renderDetail();
+function renderListKeep() {
+  const sc = $('#view .screen'), y = sc ? sc.scrollTop : 0;
+  renderList();
+  const s2 = $('#view .screen'); if (s2) s2.scrollTop = y;
 }
-function go(v, id) { view = v; if (id) current = id; render(); if (MODE === 'live' && (v === 'list' || v === 'dash')) refreshList(); }
+function detailVisible() { return isWide() ? (view !== 'dash' && !!current && !!find(current)) : view === 'detail'; }
+function render() {
+  const full = view === 'login' || view === 'boot';
+  const w = !full && window.matchMedia('(min-width:768px)').matches;
+  $('#app').classList.toggle('wide', w);
+  $('#nav').style.display = (full || (!w && view === 'detail')) ? 'none' : 'flex';
+  $('#nav').querySelectorAll('button').forEach(b => b.removeAttribute('aria-current'));
+  if (!full) $(`#nav [data-nav="${view === 'dash' ? 'dash' : 'list'}"]`).setAttribute('aria-current', 'page');
+  if (view === 'login') return renderLogin();
+  if (view === 'boot') return renderBoot('Menyambung ke server…', false);
+  if (w) { renderListKeep(); if (view === 'dash') renderDash(); else renderDetail(); return; }
+  if (view === 'list') renderList(); else if (view === 'dash') renderDash(); else renderDetail();
+}
+window.matchMedia('(min-width:768px)').addEventListener('change', () => render());
+function go(v, id) { view = v; if (id) { current = id; const t0 = find(id); if (t0 && v === 'detail' && window.matchMedia('(min-width:768px)').matches) tab = t0.status; } render(); if (MODE === 'live' && (v === 'list' || v === 'dash')) refreshList(); }
 
 /* ======================= AKSI ======================= */
 function openTicket(id) {
@@ -664,7 +736,9 @@ function solve() {
   const t = find(current); if (!t || t.status !== 'progress') return;
   if (MODE === 'live') return solveLive(t);
   t.status = 'resolved'; t.resolvedAt = Date.now(); save();
-  toast(`${t.id} selesai · total ${fmtLong(t.resolvedAt - t.createdAt)}`); renderDetail();
+  toast(`${t.id} selesai · total ${fmtLong(t.resolvedAt - t.createdAt)}`);
+  if (isWide()) { tab = t.status; renderListKeep(); }
+  renderDetail();
 }
 function reply(text) {
   const t = find(current); if (!t || t.status !== 'progress' || !text.trim()) return;
@@ -674,9 +748,9 @@ function reply(text) {
 document.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.open) return openTicket(b.dataset.open);
-  if (b.dataset.tab) { tab = b.dataset.tab; return render(); }
-  if (b.dataset.src) { src = b.dataset.src; return render(); }
-  if (b.dataset.per) { per = b.dataset.per; return render(); }
+  if (b.dataset.tab) { tab = b.dataset.tab; return isWide() ? renderListKeep() : render(); }
+  if (b.dataset.src) { src = b.dataset.src; return isWide() ? renderListKeep() : render(); }
+  if (b.dataset.per) { per = b.dataset.per; return isWide() ? renderDash() : render(); }
   if (b.dataset.nav) return go(b.dataset.nav === 'dash' ? 'dash' : 'list');
   const a = b.dataset.act;
   if (a === 'sim-new') simNew(); else if (a === 'sim-again') simAgain(); else if (a === 'solve') solve();
@@ -709,13 +783,13 @@ function tick() {
   if (lg) { const o = S.tickets.filter(t => t.status === 'open').map(t => now - t.createdAt).sort((a, b) => b - a)[0]; lg.textContent = o == null ? '—' : fmtLong(o); }
 }
 setInterval(tick, 1000);
-setInterval(() => { if (MODE === 'live') { if (view === 'list' || view === 'dash') refreshList(); else if (view === 'detail') pollDetail(); } }, POLL_MSG);
-setInterval(() => { if (MODE === 'live' && (view === 'list' || view === 'dash')) refreshList(); }, POLL_LIST);
-document.addEventListener('visibilitychange', () => { if (!document.hidden && MODE === 'live') { if (view === 'detail') pollDetail(); else refreshList(); } });
+setInterval(() => { if (MODE === 'live' && detailVisible()) pollDetail(); }, POLL_MSG);
+setInterval(() => { if (MODE === 'live' && (isWide() || view === 'list' || view === 'dash')) refreshList(); }, POLL_LIST);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && MODE === 'live') { if (detailVisible()) pollDetail(); refreshList(); } });
 // Tombol Back Android (Capacitor): kembali ke daftar dulu, baru keluar app.
 (function () {
   const A = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App; if (!A) return;
-  A.addListener('backButton', () => { if (view === 'detail' || view === 'dash') go('list'); else if (A.exitApp) A.exitApp(); });
+  A.addListener('backButton', () => { if (view === 'dash' || (view === 'detail' && !isWide())) go('list'); else if (A.exitApp) A.exitApp(); });
 })();
 if (MODE === 'demo') { S = load() || seed(); view = 'list'; render(); }
 else if (MODE === 'live') bootLive();
