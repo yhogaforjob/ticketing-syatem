@@ -436,17 +436,17 @@ async function checkUpdate(force) {
     } else if (upd) { upd = null; refreshBell(); }
   } catch (e) { /* offline: coba lagi nanti */ }
 }
-const isNative = () => !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.registerPlugin);
-let apkPlug = null, apkBusy = false;
+const isNative = () => { const C = window.Capacitor; return !!(C && C.isNativePlatform && C.isNativePlatform() && C.nativePromise && C.addListener); };
+let apkHooked = false, apkBusy = false;
 async function installUpdate() {
   if (!upd || apkBusy) return;
   const go = $('#upd-go'), bar = $('#upd-bar'), msg = $('#upd-msg'), fill = bar && bar.firstElementChild;
   const say = t => { if (msg) msg.textContent = t; };
   try {
-    if (!apkPlug) apkPlug = window.Capacitor.registerPlugin('ApkInstaller');
-    if (!apkPlug.__hooked) { apkPlug.__hooked = true; apkPlug.addListener('progress', e => { const f = $('#upd-bar'); if (f) { f.hidden = false; f.firstElementChild.style.width = e.pct + '%'; } const m = $('#upd-msg'); if (m) m.textContent = 'Mengunduh… ' + e.pct + '%'; }); }
+    const C = window.Capacitor;
+    if (!apkHooked) { apkHooked = true; C.addListener('ApkInstaller', 'progress', e => { const f = $('#upd-bar'); if (f) { f.hidden = false; f.firstElementChild.style.width = e.pct + '%'; } const m = $('#upd-msg'); if (m) m.textContent = 'Mengunduh… ' + e.pct + '%'; }); }
     apkBusy = true; if (go) go.disabled = true; if (bar) bar.hidden = false; if (fill) fill.style.width = '0%'; say('Memulai unduhan…');
-    const r = await apkPlug.install({ url: upd.url });
+    const r = await C.nativePromise('ApkInstaller', 'install', { url: upd.url });
     if (r && r.needPermission) { say('Aktifkan "Izinkan dari sumber ini" di layar yang terbuka, lalu kembali ke sini dan ketuk Unduh dan pasang lagi.'); if (bar) bar.hidden = true; }
     else { say('Layar pemasangan terbuka. Ketuk Pasang untuk menyelesaikan.'); if (fill) fill.style.width = '100%'; }
   } catch (e) {
