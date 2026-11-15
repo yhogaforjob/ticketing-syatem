@@ -1,0 +1,8 @@
+{
+  "appId": "id.nuvera.tiket",
+  "appName": "Tiket Nuvera",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

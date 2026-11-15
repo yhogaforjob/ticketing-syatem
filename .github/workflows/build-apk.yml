@@ -1,0 +1,67 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Pasang dependensi
+        run: npm ci
+
+      - name: Buat proyek Android
+        run: npx cap add android
+
+      - name: Terapkan ikon dan pengaturan
+        run: ./scripts/patch-android.sh
+
+      - name: Sinkronkan aplikasi web ke Android
+        run: npx cap sync android
+
+      - name: Build APK (debug)
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Siapkan file APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk tiket-nuvera.apk
+
+      - name: Simpan sebagai artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiket-nuvera-apk
+          path: tiket-nuvera.apk
+          retention-days: 30
+
+      - name: Terbitkan di Releases (APK terbaru)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-terbaru
+          name: APK terbaru
+          body: |
+            APK debug Tiket Nuvera, dibuat otomatis dari commit ${{ github.sha }}.
+            Unduh `tiket-nuvera.apk` di bawah, lalu pasang di Android (izinkan "install dari sumber ini" bila diminta).
+          files: tiket-nuvera.apk
+          make_latest: true
