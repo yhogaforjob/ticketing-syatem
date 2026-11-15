@@ -28,4 +28,44 @@ if ! grep -q windowSoftInputMode "$MANIFEST"; then
 fi
 grep -q windowSoftInputMode "$MANIFEST" || echo "PERINGATAN: windowSoftInputMode tidak terpasang" >&2
 
+# 5. Pembaruan dalam aplikasi: izin pasang APK, plugin native, FileProvider, versionCode
+APPID=id.nuvera.tiket
+JAVA=android/app/src/main/java/id/nuvera/tiket
+if ! grep -q REQUEST_INSTALL_PACKAGES "$MANIFEST"; then
+  sed -i 's|</manifest>|    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />\n</manifest>|' "$MANIFEST"
+fi
+grep -q REQUEST_INSTALL_PACKAGES "$MANIFEST" || { echo "GAGAL: izin REQUEST_INSTALL_PACKAGES tidak terpasang" >&2; exit 1; }
+grep -q 'fileprovider' "$MANIFEST" || { echo "GAGAL: FileProvider tidak ada di manifest" >&2; exit 1; }
+mkdir -p "$RES/xml"
+cat > "$RES/xml/file_paths.xml" <<'XML'
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="my_images" path="." />
+    <cache-path name="my_cache_images" path="." />
+</paths>
+XML
+cp android-src/ApkInstaller.java "$JAVA/ApkInstaller.java"
+cat > "$JAVA/MainActivity.java" <<'JAVA'
+package id.nuvera.tiket;
+
+import android.os.Bundle;
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(ApkInstaller.class);
+        super.onCreate(savedInstanceState);
+    }
+}
+JAVA
+VC="${GITHUB_RUN_NUMBER:-1}"
+GR=android/app/build.gradle
+sed -i -E "s/versionCode +[0-9]+/versionCode $VC/" "$GR"
+grep -q "versionCode $VC" "$GR" || echo "PERINGATAN: versionCode tidak diubah" >&2
+
+# 6. Tanda tangan tetap: tanpa ini tiap build bertanda tangan beda dan Android menolak pembaruan
+mkdir -p ~/.android
+cp signing/tiket.keystore ~/.android/debug.keystore
+
 echo "patch-android selesai"

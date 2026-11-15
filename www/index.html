@@ -103,6 +103,11 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;border-radius:16px;font-weight:800;font-size:15px;text-decoration:none}
 .btn.pri{background:var(--lime);color:var(--dk)}
 .btn.sec{color:var(--mu);margin-top:6px}
+.btn:disabled{opacity:.6;cursor:default}
+.bar{height:8px;border-radius:99px;background:var(--mint);overflow:hidden;margin:2px 0 10px}
+.bar i{display:block;height:100%;width:0;background:var(--pri);border-radius:99px;transition:width .2s}
+.sheet .note2{font-size:12.5px;color:var(--mu);margin:0 0 10px;min-height:18px}
+.lnk{display:block;text-align:center;color:var(--mu);font-size:12.5px;margin-top:8px;text-decoration:underline}
 .ava{width:42px;height:42px;border-radius:50%;background:var(--lime);color:var(--dk);display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
 .grow{flex:1;min-width:0}
 
@@ -428,13 +433,32 @@ async function checkUpdate(force) {
     } else if (upd) { upd = null; refreshBell(); }
   } catch (e) { /* offline: coba lagi nanti */ }
 }
+const isNative = () => !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.registerPlugin);
+let apkPlug = null, apkBusy = false;
+async function installUpdate() {
+  if (!upd || apkBusy) return;
+  const go = $('#upd-go'), bar = $('#upd-bar'), msg = $('#upd-msg'), fill = bar && bar.firstElementChild;
+  const say = t => { if (msg) msg.textContent = t; };
+  try {
+    if (!apkPlug) apkPlug = window.Capacitor.registerPlugin('ApkInstaller');
+    if (!apkPlug.__hooked) { apkPlug.__hooked = true; apkPlug.addListener('progress', e => { const f = $('#upd-bar'); if (f) { f.hidden = false; f.firstElementChild.style.width = e.pct + '%'; } const m = $('#upd-msg'); if (m) m.textContent = 'Mengunduh… ' + e.pct + '%'; }); }
+    apkBusy = true; if (go) go.disabled = true; if (bar) bar.hidden = false; if (fill) fill.style.width = '0%'; say('Memulai unduhan…');
+    const r = await apkPlug.install({ url: upd.url });
+    if (r && r.needPermission) { say('Aktifkan "Izinkan dari sumber ini" di layar yang terbuka, lalu kembali ke sini dan ketuk Unduh dan pasang lagi.'); if (bar) bar.hidden = true; }
+    else { say('Layar pemasangan terbuka. Ketuk Pasang untuk menyelesaikan.'); if (fill) fill.style.width = '100%'; }
+  } catch (e) {
+    say('Gagal: ' + (e && e.message ? e.message : 'coba lagi') + '. Kamu bisa unduh lewat browser.'); if (bar) bar.hidden = true;
+  } finally { apkBusy = false; if (go) go.disabled = false; }
+}
 function refreshBell() { document.querySelectorAll('.bell').forEach(b => { b.classList.toggle('has', !!upd); b.setAttribute('aria-label', upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'); }); }
 function openSheet() {
   if (!BUILD && !upd) {
     $('#sheet').innerHTML = `<span class="tag ok">Versi web</span><h3 id="sh-t">Tidak ada pembaruan</h3><p>Pembaruan otomatis hanya berlaku untuk aplikasi Android yang dipasang dari APK.</p><button class="btn sec" data-act="upd-close">Tutup</button>`;
   } else if (upd) {
     const d = upd.at ? new Date(upd.at).toLocaleString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) : '';
-    $('#sheet').innerHTML = `<span class="tag">Versi baru</span><h3 id="sh-t">Pembaruan tersedia</h3><p>Build ${upd.n}${d ? ' · ' + esc(d) + ' WIB' : ''}. Kamu memakai build ${BUILD}. Unduh, lalu ketuk file APK untuk memasangnya di atas aplikasi lama. Data login dan pengaturan tetap aman.</p><a class="btn pri" href="${esc(upd.url)}" target="_blank" rel="noopener">Unduh pembaruan</a><button class="btn sec" data-act="upd-close">Nanti saja</button>`;
+    $('#sheet').innerHTML = `<span class="tag">Versi baru</span><h3 id="sh-t">Pembaruan tersedia</h3><p>Build ${upd.n}${d ? ' · ' + esc(d) + ' WIB' : ''}. Kamu memakai build ${BUILD}. ${isNative() ? 'Aplikasi mengunduh pembaruan, lalu membuka layar pemasangan. Data login dan pengaturan tetap aman.' : 'Unduh, lalu ketuk file APK untuk memasangnya di atas aplikasi lama.'}</p>${isNative()
+      ? `<div class="bar" id="upd-bar" hidden><i></i></div><p class="note2" id="upd-msg" role="status"></p><button class="btn pri" id="upd-go" data-act="upd-install">Unduh dan pasang</button><a class="lnk" href="${esc(upd.url)}" target="_blank" rel="noopener">Unduh lewat browser</a>`
+      : `<a class="btn pri" href="${esc(upd.url)}" target="_blank" rel="noopener">Unduh pembaruan</a>`}<button class="btn sec" data-act="upd-close">Nanti saja</button>`;
   } else {
     $('#sheet').innerHTML = `<span class="tag ok">Terbaru</span><h3 id="sh-t">Aplikasi sudah versi terbaru</h3><p>Kamu memakai build ${BUILD}. Pengecekan berjalan otomatis.</p><button class="btn sec" data-act="upd-close">Tutup</button>`;
     checkUpdate(true);
@@ -861,7 +885,7 @@ document.addEventListener('click', e => {
   const a = b.dataset.act;
   if (a === 'sim-new') simNew(); else if (a === 'sim-again') simAgain(); else if (a === 'solve') solve();
   else if (a === 'send') reply($('#reply').value);
-  else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'login') login(); else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
+  else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'upd-install') installUpdate(); else if (a === 'login') login(); else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
   else if (a === 'reset') { S = seed(); save(); tab = 'open'; src = 'all'; toast('Data demo direset'); render(); }
 });
 document.addEventListener('change', e => {
