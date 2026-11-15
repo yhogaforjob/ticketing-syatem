@@ -476,7 +476,7 @@ function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList
 /* ======================= MODE LIVE (tersambung ke n8n) ======================= */
 const API = 'https://n8n-wy6olg9sfchs.jkt2.sumopod.my.id/webhook/tiket-agen';
 const CFG_KEY = 'ticketing-live-cfg';
-const POLL_LIST = 8000, POLL_MSG = 4000;
+const POLL_LIST = 5000, POLL_MSG = 2000; // pengecekan 'same' ringan (tanpa baca Sheets), jadi aman dipercepat
 let CFG = (() => { try { return JSON.parse(localStorage.getItem(CFG_KEY)); } catch (e) { return null; } })();
 let MODE = !CFG ? 'login' : CFG.demo ? 'demo' : 'live';
 let loaded = false, listSig = '', conn = true, listBusy = false, detBusy = false;
