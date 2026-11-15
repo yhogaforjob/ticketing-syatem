@@ -67,5 +67,9 @@ grep -q "versionCode $VC" "$GR" || echo "PERINGATAN: versionCode tidak diubah" >
 # 6. Tanda tangan tetap: tanpa ini tiap build bertanda tangan beda dan Android menolak pembaruan
 mkdir -p ~/.android
 cp signing/tiket.keystore ~/.android/debug.keystore
+if ! grep -q 'tiket.keystore' "$GR"; then
+  sed -i '0,/^android {/s//android {\n    signingConfigs {\n        debug {\n            storeFile file("..\/..\/signing\/tiket.keystore")\n            storePassword "android"\n            keyAlias "androiddebugkey"\n            keyPassword "android"\n        }\n    }/' "$GR"
+fi
+grep -q 'tiket.keystore' "$GR" || { echo "GAGAL: signingConfigs tidak terpasang" >&2; exit 1; }
 
 echo "patch-android selesai"

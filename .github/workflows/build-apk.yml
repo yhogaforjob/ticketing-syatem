@@ -53,6 +53,14 @@ jobs:
       - name: Siapkan file APK
         run: cp android/app/build/outputs/apk/debug/app-debug.apk tiket-nuvera.apk
 
+      - name: Pastikan APK memakai tanda tangan tetap
+        run: |
+          WANT=$(keytool -list -keystore signing/tiket.keystore -storepass android | grep -o 'SHA-256: .*\|[0-9A-F:]\{95\}' | head -1 | grep -o '[0-9A-F:]\{95\}')
+          GOT=$(keytool -printcert -jarfile tiket-nuvera.apk | grep -o 'SHA256: [0-9A-F:]*' | head -1 | cut -c9-)
+          echo "kunci tetap : $WANT"
+          echo "kunci APK   : $GOT"
+          test -n "$WANT" && test "$WANT" = "$GOT"
+
       - name: Simpan sebagai artifact
         uses: actions/upload-artifact@v4
         with:
