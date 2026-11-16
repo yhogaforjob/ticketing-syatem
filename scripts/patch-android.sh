@@ -44,7 +44,7 @@ cat > "$RES/xml/file_paths.xml" <<'XML'
     <cache-path name="my_cache_images" path="." />
 </paths>
 XML
-cp android-src/ApkInstaller.java "$JAVA/ApkInstaller.java"
+cp android-src/ApkInstaller.java android-src/BgService.java android-src/BootReceiver.java android-src/NotifBg.java "$JAVA/"
 cat > "$JAVA/MainActivity.java" <<'JAVA'
 package id.nuvera.tiket;
 
@@ -55,10 +55,20 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(ApkInstaller.class);
+        registerPlugin(NotifBg.class);
         super.onCreate(savedInstanceState);
     }
 }
 JAVA
+# 5b. Pemantau chat di latar belakang: izin, layanan, dan penerima boot
+for PERM in POST_NOTIFICATIONS FOREGROUND_SERVICE FOREGROUND_SERVICE_SPECIAL_USE WAKE_LOCK RECEIVE_BOOT_COMPLETED REQUEST_IGNORE_BATTERY_OPTIMIZATIONS; do
+  grep -q "android.permission.$PERM\"" "$MANIFEST" || sed -i "s|</manifest>|    <uses-permission android:name=\"android.permission.$PERM\" />\n</manifest>|" "$MANIFEST"
+  grep -q "android.permission.$PERM\"" "$MANIFEST" || { echo "GAGAL: izin $PERM tidak terpasang" >&2; exit 1; }
+done
+if ! grep -q 'id.nuvera.tiket.BgService\|\.BgService' "$MANIFEST"; then
+  sed -i 's|</application>|        <service android:name=".BgService" android:exported="false" android:foregroundServiceType="specialUse">\n            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="Memantau tiket dan chat baru dari server sendiri" />\n        </service>\n        <receiver android:name=".BootReceiver" android:exported="true">\n            <intent-filter>\n                <action android:name="android.intent.action.BOOT_COMPLETED" />\n                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />\n            </intent-filter>\n        </receiver>\n    </application>|' "$MANIFEST"
+fi
+grep -q '\.BgService' "$MANIFEST" || { echo "GAGAL: BgService tidak terpasang di manifest" >&2; exit 1; }
 VC="${GITHUB_RUN_NUMBER:-1}"
 GR=android/app/build.gradle
 sed -i -E "s/versionCode +[0-9]+/versionCode $VC/" "$GR"

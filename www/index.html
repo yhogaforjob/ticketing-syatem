@@ -512,7 +512,16 @@ function renderKeepScroll() {
   const s2 = document.querySelector('.screen'); if (s2) s2.scrollTop = y;
 }
 function badKey() { toast('Kunci agent tidak berlaku, silakan masuk lagi'); setTimeout(logout, 1200); }
-function logout() { try { localStorage.removeItem(CFG_KEY); } catch (e) {} location.reload(); }
+function logout() { bgStop(); try { localStorage.removeItem(CFG_KEY); } catch (e) {} location.reload(); }
+// Pemantau chat di latar belakang (hanya di aplikasi Android): notifikasi tiket/chat baru walau aplikasi ditutup.
+function bgCall(m, p) { try { const C = window.Capacitor; if (C && C.isNativePlatform && C.isNativePlatform() && C.nativePromise) return C.nativePromise('NotifBg', m, p || {}); } catch (e) {} return Promise.resolve(null); }
+function bgStart() {
+  if (MODE !== 'live' || !CFG || !CFG.key) return;
+  bgCall('start', { api: API, key: CFG.key, agent: CFG.agent }).catch(() => {});
+  let asked = false; try { asked = !!localStorage.getItem('tx-bat'); } catch (e) {}
+  if (!asked) { try { localStorage.setItem('tx-bat', '1'); } catch (e) {} setTimeout(() => bgCall('battery').catch(() => {}), 8000); }
+}
+function bgStop() { bgCall('stop').catch(() => {}); }
 function startDemo() { CFG = { demo: true }; saveCfg(); location.reload(); }
 
 function fromRow(r) {
@@ -924,6 +933,7 @@ $('#ovl').addEventListener('click', e => { if (e.target.id === 'ovl') closeSheet
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
 setInterval(() => checkUpdate(), 30 * 60 * 1000);
 setTimeout(() => checkUpdate(true), 2500);
+setTimeout(bgStart, 1500);
 // Tombol Back Android (Capacitor): kembali ke daftar dulu, baru keluar app.
 (function () {
   const A = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App; if (!A) return;
