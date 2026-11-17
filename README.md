@@ -19,6 +19,12 @@ Aplikasi ini ──────▶ n8n /tiket-agen   ──▶ Google Sheet
 Aplikasi ini tidak membaca Sheet langsung. Semua lewat webhook `tiket-agen` di n8n, yang dilindungi kunci agent.
 Workflow n8n-nya ada di file `ticketing_chat.json` dan `ticketing_system_sheet.json` (tidak disimpan di repo ini).
 
+## Info pelanggan dan reset PIN Nuvera Kasir
+
+Di detail tiket (mode live) ada kartu **Pelanggan**: usaha, paket, lisensi (samar), masa berlaku, email akun, HP, versi app. Datanya dari tab `POS Registrasi` lewat aksi `customer`.
+Tombol **Buat kode reset PIN** (aksi `reset`) meminta agent mencentang minimal 2 data yang cocok dengan pelanggan, lalu membuat kode 6 angka (30 menit, sekali pakai) yang bisa disalin atau dikirim ke chat.
+Perangkat yang belum terdaftar (Nuvera Kasir di bawah v0.2.24) tidak punya data, jadi tombolnya tidak muncul. Butuh workflow n8n satu flow `n8n-workflow-nuvera-satu-flow.json` (repo Nusavera-Digital---POS, folder docs/ticketing).
+
 ## Memasang APK
 
 1. Buka halaman **Releases** repo ini, rilis **APK terbaru**.

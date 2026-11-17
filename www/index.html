@@ -107,6 +107,17 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .bar{height:8px;border-radius:99px;background:var(--mint);overflow:hidden;margin:2px 0 10px}
 .bar i{display:block;height:100%;width:0;background:var(--pri);border-radius:99px;transition:width .2s}
 .sheet .note2{font-size:12.5px;color:var(--mu);margin:0 0 10px;min-height:18px}
+.cust{margin:10px 16px 0;padding:12px 14px;background:var(--cd);border-radius:18px;box-shadow:0 1px 0 rgba(6,51,46,.06)}
+.pane .cust{margin-left:max(16px,calc((100% - 760px) / 2));margin-right:max(16px,calc((100% - 760px) / 2))}
+.cust h4{margin:0 0 6px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mu);font-weight:800}
+.cust .kv{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:13px}
+.cust .kv span{color:var(--mu);flex:none}.cust .kv b{font-weight:700;text-align:right;word-break:break-word}
+.cust .btn{margin-top:10px;min-height:44px}
+.lnk2{background:none;border:0;padding:0;color:var(--pri);text-decoration:underline;font:inherit;cursor:pointer}
+.rs-o{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:var(--mint);margin:0 0 8px;cursor:pointer}
+.rs-o input{margin-top:3px;width:18px;height:18px;flex:none}
+.rs-o small{display:block;color:var(--mu);font-size:12.5px;word-break:break-word}
+.rs-code{font-size:38px;font-weight:800;letter-spacing:.18em;text-align:center;padding:14px 0;margin:4px 0 6px;background:var(--mint);border-radius:18px;font-variant-numeric:tabular-nums}
 .lnk{display:block;text-align:center;color:var(--mu);font-size:12.5px;margin-top:8px;text-decoration:underline}
 .ava{width:42px;height:42px;border-radius:50%;background:var(--lime);color:var(--dk);display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
 .grow{flex:1;min-width:0}
@@ -779,8 +790,10 @@ function renderDetail() {
     <div class="panel"><div><small>Open</small><b data-t="${t.id}:open">${fmt(d.open)}</b></div><div><small>In Progress</small><b data-t="${t.id}:prog">${fmt(d.prog)}</b></div><div class="${t.status === 'resolved' ? 'hl' : ''}"><small>Total</small><b data-t="${t.id}:total">${fmt(d.total)}</b></div></div>
     <div class="mrow">${srcPill(t.app)}<label class="catsel"><svg class="f" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4m0 0h11l-2 4 2 4H5"/></svg><select data-catsel aria-label="Kategori komplain">${opts}</select></label><span class="hint">${t.manual ? 'diubah manual' : 'dikenali otomatis'}</span></div>
     ${info}
+    ${custHtml(t)}
     <div class="thread" id="thread">${t.msgs.length ? t.msgs.map(msgHtml).join('') : (MODE === 'live' ? '<div class="hint" style="text-align:center;padding:16px">Memuat percakapan…</div>' : '')}</div>${foot}`;
   const th = $('#thread'); th.scrollTop = th.scrollHeight;
+  loadCust(t);
 }
 
 function renderDash() {
@@ -848,6 +861,79 @@ function render() {
 window.matchMedia('(min-width:768px)').addEventListener('change', () => render());
 function go(v, id) { view = v; if (id) { current = id; const t0 = find(id); if (t0 && v === 'detail') { markRead(t0); if (window.matchMedia('(min-width:768px)').matches) tab = t0.status; } } render(); if (MODE === 'live' && (v === 'list' || v === 'dash')) refreshList(); }
 
+/* ======================= PELANGGAN + RESET PIN (Nuvera Kasir) ======================= */
+const CUST = {};
+function custHtml(t) {
+  if (MODE !== 'live') return '';
+  const c = CUST[t.id];
+  if (!c || c.loading) return '<div class="cust" id="cust"><span class="hint">Memuat data pelanggan…</span></div>';
+  if (c.err) return '<div class="cust" id="cust"><span class="hint">Data pelanggan gagal dimuat. <button class="lnk2" data-act="cust-retry">Coba lagi</button></span></div>';
+  const d = c.data;
+  if (!d) return '<div class="cust" id="cust"><span class="hint"><b>Perangkat belum terdaftar.</b> HP pelanggan belum memakai Nuvera Kasir v0.2.24 ke atas atau belum pernah online, jadi kode reset PIN belum bisa dibuat.</span></div>';
+  const kv = [['Usaha', d.nama_usaha], ['Paket', [d.tipe_paket, d.lisensi_status].filter(Boolean).join(' · ')], ['Lisensi', d.lisensi_masked], ['Berlaku s/d', d.masa_berlaku_sampai], ['Email akun', d.email_akun],
+    ['HP', [d.model_hp, d.os_android && 'Android ' + d.os_android].filter(Boolean).join(' · ')], ['Versi app', d.versi_app], ['Terakhir aktif', d.terakhir_aktif], ['Status reset', d.status_reset]]
+    .filter(r => r[1]).map(r => `<div class="kv"><span>${r[0]}</span><b>${esc(r[1])}</b></div>`).join('');
+  return `<div class="cust" id="cust"><h4>Pelanggan</h4>${kv}${t.status === 'progress' ? '<button class="btn pri" data-act="rs-open">Buat kode reset PIN</button>' : ''}</div>`;
+}
+async function loadCust(t, force) {
+  if (MODE !== 'live') return;
+  if (CUST[t.id] && !force) return;
+  CUST[t.id] = { loading: true };
+  try { const j = await api('customer', { ticket: t.id }); CUST[t.id] = j && j.ok ? { data: j.customer || null } : { err: 1 }; }
+  catch (e) { CUST[t.id] = { err: 1 }; }
+  const el = $('#cust'); if (el && current === t.id) el.outerHTML = custHtml(t);
+}
+let RS = null;
+function rsOpen() {
+  const t = find(current), c = t && CUST[t.id]; if (!t || !c || !c.data) return;
+  const d = c.data;
+  const opts = [['Nama usaha', d.nama_usaha], ['Email akun', d.email_akun], ['4 digit akhir lisensi', d.lisensi_masked && d.lisensi_masked.slice(-4)], ['Model HP', d.model_hp], ['Tanggal pertama dipakai', d.tanggal_daftar && d.tanggal_daftar.slice(0, 10)]].filter(o => o[1]);
+  RS = { tid: t.id, opts, code: null, busy: false };
+  rsDraw(); $('#ovl').classList.add('show');
+}
+function rsDraw() {
+  if (!RS) return;
+  const t = find(RS.tid), name = t ? esc(t.cust.split(' ')[0]) : 'pelanggan';
+  if (RS.code) {
+    $('#sheet').innerHTML = `<span class="tag ok">Kode dibuat</span><h3 id="sh-t">Kode reset PIN</h3><p>Berlaku sampai ${esc(RS.exp)} WIB (30 menit) dan hanya bisa dipakai sekali.</p><div class="rs-code" aria-label="Kode reset">${esc(RS.code)}</div>
+      <button class="btn pri" data-act="rs-send">Kirim ke chat ${name}</button><button class="btn sec" data-act="rs-copy">Salin kode</button><button class="btn sec" data-act="upd-close">Tutup</button>`;
+    return;
+  }
+  const ok = RS.opts.length >= 2;
+  $('#sheet').innerHTML = `<span class="tag">Reset PIN manager</span><h3 id="sh-t">Buat kode reset PIN</h3>
+    <p>${ok ? 'Tanyakan ke pelanggan, lalu centang data yang cocok. Minimal 2.' : 'Data pelanggan terlalu sedikit untuk verifikasi (butuh minimal 2).'}</p>
+    ${RS.opts.map((o, i) => `<label class="rs-o"><input type="checkbox" data-rs="${i}"><span><b>${o[0]}</b><small>${esc(o[1])}</small></span></label>`).join('')}
+    ${ok ? '<button class="btn pri" id="rs-go" data-act="rs-go" disabled>Buat kode</button>' : ''}<button class="btn sec" data-act="upd-close">Batal</button>`;
+}
+async function rsGo() {
+  if (!RS || RS.busy) return;
+  const picks = [...document.querySelectorAll('[data-rs]:checked')].map(x => RS.opts[+x.dataset.rs][0]);
+  if (picks.length < 2) return;
+  RS.busy = true; const go = $('#rs-go'); if (go) { go.disabled = true; go.textContent = 'Membuat kode…'; }
+  try {
+    const j = await api('reset', { ticket: RS.tid, cek: picks.join(', ') });
+    if (!j.ok) throw new Error(j.code || 'x');
+    RS.code = j.code; RS.exp = new Date(j.expires_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }).replace('.', ':');
+    delete CUST[RS.tid]; if (current === RS.tid) loadCust(find(RS.tid), true);
+  } catch (e) { toast({ invalid: 'Isi verifikasi dulu', nodata: 'Perangkat belum terdaftar', notfound: 'Tiket tidak ditemukan', rate: 'Terlalu banyak kode, coba lagi nanti' }[e.message] || 'Gagal membuat kode, coba lagi'); }
+  RS.busy = false; rsDraw();
+}
+function rsCopy() {
+  if (!RS || !RS.code) return;
+  const ok = () => toast('Kode disalin'), no = () => toast('Tidak bisa menyalin, salin manual');
+  try { navigator.clipboard.writeText(RS.code).then(ok, no); } catch (e) { no(); }
+}
+function rsSend() {
+  const t = RS && find(RS.tid); if (!t || !RS.code) return;
+  if (t.status !== 'progress') return toast('Tiket ini sudah selesai');
+  const txt = `Kode reset PIN manager Anda: ${RS.code}. Berlaku sampai ${RS.exp} WIB dan hanya bisa dipakai sekali. Di Nuvera Kasir, buka layar PIN, ketuk "Lupa?", masukkan kode ini lalu buat PIN baru. Jangan bagikan kode ini ke siapa pun.`;
+  closeSheet(); replyLive(t, txt);
+}
+document.addEventListener('change', e => {
+  if (e.target.dataset.rs === undefined) return;
+  const n = document.querySelectorAll('[data-rs]:checked').length, go = $('#rs-go'); if (go) go.disabled = n < 2;
+});
+
 /* ======================= AKSI ======================= */
 function openTicket(id) {
   const t = find(id); if (!t) return;
@@ -897,6 +983,8 @@ document.addEventListener('click', e => {
   const a = b.dataset.act;
   if (a === 'sim-new') simNew(); else if (a === 'sim-again') simAgain(); else if (a === 'solve') solve();
   else if (a === 'send') reply($('#reply').value);
+  else if (a === 'rs-open') rsOpen(); else if (a === 'rs-go') rsGo(); else if (a === 'rs-copy') rsCopy(); else if (a === 'rs-send') rsSend();
+  else if (a === 'cust-retry') { const t = find(current); if (t) { CUST[t.id] = { loading: true }; const el = $('#cust'); if (el) el.outerHTML = custHtml(t); delete CUST[t.id]; loadCust(t, true); } }
   else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'upd-install') installUpdate(); else if (a === 'login') login(); else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
   else if (a === 'reset') { S = seed(); save(); tab = 'open'; src = 'all'; toast('Data demo direset'); render(); }
 });
