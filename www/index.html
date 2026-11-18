@@ -77,6 +77,71 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
   .name{font-size:14px}
   .nav button{padding:9px 4px;font-size:13px}
 }
+/* detail: susunan HP (isi samping ditaruh di atas percakapan) */
+.dwrap,.dmain,.dside{display:contents}
+.dmain>.hero{order:1}.dside>*{order:2}.dmain>.thread{order:3}.dmain>.composer{order:4}
+.rail{display:none}
+
+/* DESKTOP (>=1100px): menu samping + daftar + percakapan + panel info */
+@media (min-width:1100px){
+  body{background:var(--bg)}
+  .app.desk{max-width:none}
+  .app.desk .rail{display:flex;flex-direction:column;align-items:center;gap:6px;width:84px;flex:none;padding:18px 0 16px;background:linear-gradient(180deg,var(--dk),#073A33);color:#fff}
+  .rail .logo{width:44px;height:44px;border-radius:14px;background:var(--lime);color:var(--dk);display:grid;place-items:center;font-weight:800;font-size:20px;margin-bottom:18px;letter-spacing:-.04em}
+  .rail .rb{width:64px;padding:10px 0 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#A9CFC5;position:relative}
+  .rail .rb:hover{background:rgba(255,255,255,.08);color:#fff}
+  .rail .rb[aria-current=page]{background:rgba(183,242,60,.16);color:var(--lime)}
+  .rail .rb svg.i{width:22px;height:22px}
+  .rail .rb.wt::after{content:'';position:absolute;top:8px;right:14px;width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 2px #0A4D43}
+  .rail .sp{flex:1}
+  .rail .bell{margin-bottom:6px}
+  .rail .ava{margin-top:4px}
+  .app.desk .nav{display:none!important}
+  .app.desk .left{width:400px;background:#fff;border-right:1px solid var(--ln)}
+  .app.desk .left .hero{border-radius:0;padding:24px 22px 46px}
+  .app.desk .left .hero .bell,.app.desk .left .hero .ava{display:none}
+  .app.desk .left .screen{scrollbar-width:thin}
+  .app.desk .list{gap:10px;padding:12px 16px 20px}
+  .app.desk .card{border-radius:16px;padding:13px 15px;box-shadow:none;border:1px solid var(--ln);transition:border-color .12s,background .12s}
+  .app.desk .card:hover{border-color:#B8D3C9;background:#FBFDFC}
+  .app.desk .card.wait{border-color:#27302E}
+  .app.desk .card.wait:hover{background:#2E3836}
+  .app.desk .card.sel{outline:2px solid var(--pri);outline-offset:1px}
+  .app.desk .card .name{font-size:14.5px;margin-top:9px}
+  .app.desk .ribbon{margin:10px -15px -13px;padding:8px 15px}
+  .app.desk .tab{font-size:12.5px;padding:10px 4px}
+  .app.desk .tab .n{min-width:20px;height:20px;font-size:11px}
+  .app.desk .chips{padding:14px 16px 2px;scrollbar-width:thin}
+
+  .app.desk .pane{background:var(--bg)}
+  .app.desk .dwrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;flex:1;min-height:0}
+  .app.desk .dmain{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .app.desk .dside{display:block;overflow-y:auto;background:#fff;border-left:1px solid var(--ln);padding:22px 20px 24px}
+  .app.desk .dmain>.hero{border-radius:0;padding:16px 28px!important;background:#fff;color:var(--tx);border-bottom:1px solid var(--ln)}
+  .app.desk .dmain>.hero .name{color:var(--tx);font-size:17px}
+  .app.desk .dmain>.hero .meta{color:var(--mu)}
+  .app.desk .dmain>.hero .ava2{display:grid}
+  .app.desk .thread{padding:22px 28px;gap:8px;background:radial-gradient(circle at 1px 1px,rgba(11,107,92,.07) 1px,transparent 0) 0 0/22px 22px,var(--bg)}
+  .app.desk .msg{max-width:min(62%,620px);font-size:14px}
+  .app.desk .composer{padding:14px 28px 16px;background:#fff;border-top:1px solid var(--ln)}
+  .app.desk .composer.cp{flex-direction:row;align-items:center;gap:12px}
+  .app.desk .composer.cp .cin{flex:1}
+  .app.desk .composer.cp .solve{width:auto;padding:13px 20px;white-space:nowrap;font-size:14px}
+  .app.desk .cin input{font-size:14.5px;background:var(--bg)}
+  .app.desk .dside .panel{margin:0 0 18px;width:auto;max-width:none;grid-template-columns:1fr;gap:0;box-shadow:none;background:var(--bg);padding:6px 14px;border-radius:16px}
+  .app.desk .dside .panel div{display:flex;justify-content:space-between;align-items:baseline;text-align:left;padding:10px 0;border-radius:0}
+  .app.desk .dside .panel div+div{border-top:1px solid var(--ln)}
+  .app.desk .dside .panel small{font-size:12.5px;margin:0}
+  .app.desk .dside .panel b{font-size:16px}
+  .app.desk .dside .panel .hl{background:none;color:var(--ok)}.app.desk .dside .panel .hl small{color:var(--mu)}
+  .app.desk .dside .stt{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);font-weight:800;margin:0 0 10px}
+  .app.desk .dside .mrow{padding:0 0 10px!important;margin:0}
+  .app.desk .dside .cust{margin:10px 0 0!important;padding:16px;background:var(--bg);box-shadow:none;border-radius:16px}
+  .app.desk .pane .hero{border-radius:0}
+  .app.desk .pane .dbody{padding:0 32px 24px}
+}
+.stt{display:none}
+
 .screen{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 .screen::-webkit-scrollbar{display:none}
 
@@ -260,6 +325,15 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 </head>
 <body>
 <div class="app" id="app">
+  <aside class="rail" id="rail" aria-label="Menu">
+    <div class="logo" aria-hidden="true">N</div>
+    <button class="rb" data-nav="list"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Tiket</button>
+    <button class="rb" data-nav="dash"><svg class="i" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Dashboard</button>
+    <div class="sp"></div>
+    <button class="bell" data-act="bell" aria-label="Notifikasi"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button>
+    <button class="rb" data-act="logout" title="Keluar"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Keluar</button>
+    <div class="ava" id="rail-ava" aria-hidden="true"></div>
+  </aside>
   <div class="left">
   <div id="view"></div>
   <nav class="nav" id="nav" aria-label="Navigasi utama">
@@ -752,11 +826,13 @@ function renderList() {
   const pool = S.tickets.filter(t => src === 'all' || t.app === src);
   const cnt = k => pool.filter(t => t.status === k).length;
   let items = pool.filter(t => t.status === tab);
-  items.sort((a, b) => tab === 'resolved' ? b.resolvedAt - a.resolvedAt : (tab === 'progress' ? a.inProgressAt - b.inProgressAt : a.createdAt - b.createdAt));
+  items.sort((a, b) => tab === 'resolved' ? b.resolvedAt - a.resolvedAt : (tab === 'progress' ? (lastInfo(b).at || 0) - (lastInfo(a).at || 0) : a.createdAt - b.createdAt));
   const total = items.length; if (tab === 'resolved') items = items.slice(0, 25);
   let listHtml;
   if (tab === 'progress' && items.some(waiting)) {
-    const need = items.filter(waiting).sort((a, b) => pend(a).since - pend(b).since), rest = items.filter(t => !waiting(t));
+    // pesan customer terbaru di paling atas (seperti WhatsApp), supaya chat baru tidak tenggelam di bawah
+    const recent = (a, b) => (lastInfo(b).at || 0) - (lastInfo(a).at || 0);
+    const need = items.filter(waiting).sort(recent), rest = items.filter(t => !waiting(t)).sort(recent);
     listHtml = `<div class="sec"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Perlu dibalas<span class="cnt">${need.length}</span></div>${need.map(card).join('')}`
       + (rest.length ? `<div class="sec" style="margin-top:8px">Menunggu customer<span style="font-weight:500">· ${rest.length}</span></div>${rest.map(card).join('')}` : '');
   }
@@ -776,7 +852,7 @@ function renderDetail() {
   const d = durs(t, Date.now());
   let foot = '';
   if (t.status === 'progress') {
-    foot = `<div class="composer"><div class="cin"><input id="reply" type="text" placeholder="Tulis balasan ke ${esc(t.cust.split(' ')[0])}…" autocomplete="off" enterkeyhint="send" aria-label="Balasan"><button class="send" type="button" data-act="send" aria-label="Kirim balasan"><svg class="i" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>
+    foot = `<div class="composer cp"><div class="cin"><input id="reply" type="text" placeholder="Tulis balasan ke ${esc(t.cust.split(' ')[0])}…" autocomplete="off" enterkeyhint="send" aria-label="Balasan"><button class="send" type="button" data-act="send" aria-label="Kirim balasan"><svg class="i" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>
       <button class="solve" data-act="solve"><svg class="i" viewBox="0 0 24 24" style="stroke-width:2.6"><path d="M20 6 9 17l-5-5"/></svg>Tandai Solved</button></div>`;
   } else if (t.status === 'resolved') {
     foot = `<div class="composer"><div class="cin"><input type="text" disabled placeholder="Tiket sudah Resolved" aria-label="Balasan dikunci"><button class="send" type="button" disabled aria-label="Kirim balasan"><svg class="i" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div><div class="note"><b>Selesai dalam ${fmtLong(d.total)}.</b> Open ${fmtLong(d.open)} + In Progress ${fmtLong(d.prog)}. Kalau customer chat lagi, sistem membuat tiket baru.</div>
@@ -785,13 +861,17 @@ function renderDetail() {
   const opts = CAT_ORDER.map(k => `<option value="${esc(k)}"${k === t.cat ? ' selected' : ''}>${esc(catN(k))}</option>`).join('');
   const bits = MODE === 'live' ? [t.contact && 'Kontak ' + t.contact, t.biz, t.plan && '(' + t.plan + ')', t.ver && 'v' + t.ver, t.os].filter(Boolean) : [];
   const info = bits.length ? `<div class="mrow" style="padding-top:8px"><span class="hint">${esc(bits.join(' · '))}</span></div>` : '';
-  rightEl().innerHTML = `<div class="hero" style="padding-bottom:42px"><div class="dh"><button class="back" data-nav="list" aria-label="Kembali ke daftar"><svg class="i" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="m15 18-6-6 6-6"/></svg></button>
+  rightEl().innerHTML = `<div class="dwrap"><div class="dmain"><div class="hero" style="padding-bottom:42px"><div class="dh"><button class="back" data-nav="list" aria-label="Kembali ke daftar"><svg class="i" viewBox="0 0 24 24" style="stroke-width:2.4"><path d="m15 18-6-6 6-6"/></svg></button>
       <div class="grow"><div class="name">${esc(t.cust)}</div><div class="meta">${t.id} · masuk ${when(t.createdAt)}</div></div>${badge(t.status)}</div></div>
+    <div class="thread" id="thread">${t.msgs.length ? t.msgs.map(msgHtml).join('') : (MODE === 'live' ? '<div class="hint" style="text-align:center;padding:16px">Memuat percakapan…</div>' : '')}</div>${foot}</div>
+    <aside class="dside" aria-label="Detail tiket">
+    <span class="stt">Durasi</span>
     <div class="panel"><div><small>Open</small><b data-t="${t.id}:open">${fmt(d.open)}</b></div><div><small>In Progress</small><b data-t="${t.id}:prog">${fmt(d.prog)}</b></div><div class="${t.status === 'resolved' ? 'hl' : ''}"><small>Total</small><b data-t="${t.id}:total">${fmt(d.total)}</b></div></div>
+    <span class="stt">Sumber &amp; kategori</span>
     <div class="mrow">${srcPill(t.app)}<label class="catsel"><svg class="f" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4m0 0h11l-2 4 2 4H5"/></svg><select data-catsel aria-label="Kategori komplain">${opts}</select></label><span class="hint">${t.manual ? 'diubah manual' : 'dikenali otomatis'}</span></div>
     ${info}
     ${custHtml(t)}
-    <div class="thread" id="thread">${t.msgs.length ? t.msgs.map(msgHtml).join('') : (MODE === 'live' ? '<div class="hint" style="text-align:center;padding:16px">Memuat percakapan…</div>' : '')}</div>${foot}`;
+    </aside></div>`;
   const th = $('#thread'); th.scrollTop = th.scrollHeight;
   loadCust(t);
 }
@@ -849,16 +929,19 @@ function render() {
   const full = view === 'login' || view === 'boot';
   const w = !full && window.matchMedia('(min-width:768px)').matches;
   $('#app').classList.toggle('wide', w);
+  $('#app').classList.toggle('desk', w && window.matchMedia('(min-width:1100px)').matches);
   $('#nav').style.display = (full || (!w && view === 'detail')) ? 'none' : 'flex';
-  $('#nav').querySelectorAll('button').forEach(b => b.removeAttribute('aria-current'));
-  if (!full) $(`#nav [data-nav="${view === 'dash' ? 'dash' : 'list'}"]`).setAttribute('aria-current', 'page');
-  $('#nav [data-nav="list"]').classList.toggle('wt', !full && anyWait());
+  document.querySelectorAll('#nav button,#rail [data-nav]').forEach(b => b.removeAttribute('aria-current'));
+  if (!full) document.querySelectorAll(`#nav [data-nav="${view === 'dash' ? 'dash' : 'list'}"],#rail [data-nav="${view === 'dash' ? 'dash' : 'list'}"]`).forEach(b => b.setAttribute('aria-current', 'page'));
+  document.querySelectorAll('#nav [data-nav="list"],#rail [data-nav="list"]').forEach(b => b.classList.toggle('wt', !full && anyWait()));
+  $('#rail-ava').textContent = initials(); refreshBell();
   if (view === 'login') return renderLogin();
   if (view === 'boot') return renderBoot('Menyambung ke server…', false);
   if (w) { renderListKeep(); if (view === 'dash') renderDash(); else renderDetail(); return; }
   if (view === 'list') renderList(); else if (view === 'dash') renderDash(); else renderDetail();
 }
 window.matchMedia('(min-width:768px)').addEventListener('change', () => render());
+window.matchMedia('(min-width:1100px)').addEventListener('change', () => render());
 function go(v, id) { view = v; if (id) { current = id; const t0 = find(id); if (t0 && v === 'detail') { markRead(t0); if (window.matchMedia('(min-width:768px)').matches) tab = t0.status; } } render(); if (MODE === 'live' && (v === 'list' || v === 'dash')) refreshList(); }
 
 /* ======================= PELANGGAN + RESET PIN (Nuvera Kasir) ======================= */
