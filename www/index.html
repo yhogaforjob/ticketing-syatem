@@ -949,7 +949,7 @@ function go(v, id) { view = v; if (id) { current = id; const t0 = find(id); if (
 /* ======================= PELANGGAN + RESET PIN (Nuvera Kasir) ======================= */
 const CUST = {};
 function custHtml(t) {
-  if (MODE !== 'live') return '';
+  if (MODE !== 'live' || t.app !== 'nv') return ''; // data perangkat hanya ada untuk Nuvera Kasir
   const c = CUST[t.id];
   if (!c || c.loading) return '<div class="cust" id="cust"><span class="hint">Memuat data pelanggan…</span></div>';
   if (c.err) return '<div class="cust" id="cust"><span class="hint">Data pelanggan gagal dimuat. <button class="lnk2" data-act="cust-retry">Coba lagi</button></span></div>';
@@ -961,7 +961,7 @@ function custHtml(t) {
   return `<div class="cust" id="cust"><h4>Pelanggan</h4>${kv}${t.status === 'progress' ? '<button class="btn pri" data-act="rs-open">Buat kode reset PIN</button>' : ''}</div>`;
 }
 async function loadCust(t, force) {
-  if (MODE !== 'live') return;
+  if (MODE !== 'live' || t.app !== 'nv') return;
   if (CUST[t.id] && !force) return;
   CUST[t.id] = { loading: true };
   try { const j = await api('customer', { ticket: t.id }); CUST[t.id] = j && j.ok ? { data: j.customer || null } : { err: 1 }; }
