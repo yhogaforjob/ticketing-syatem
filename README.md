@@ -19,6 +19,22 @@ Aplikasi ini ──────▶ n8n /tiket-agen   ──▶ Google Sheet
 Aplikasi ini tidak membaca Sheet langsung. Semua lewat webhook `tiket-agen` di n8n, yang dilindungi kunci agent.
 Workflow n8n-nya ada di file `ticketing_chat.json` dan `ticketing_system_sheet.json` (tidak disimpan di repo ini).
 
+## Chat Shopee (lewat Duoke + tablet bridge)
+
+Tiket Shopee berkode `SHP-xxxxx` dan berlabel sumber **Shopee**. Datanya tidak lewat n8n:
+
+```
+Pembeli Shopee ─▶ Duoke ─▶ tablet bridge (script di Duoke web) ─▶ Supabase (tabel tiket_*)
+Aplikasi ini ──── RPC tiket_agent (kunci agent yang sama) ───────▶ Supabase
+Balasan agent ─▶ tiket_outbox ─▶ tablet bridge ─▶ Duoke ─▶ Shopee
+```
+
+- Daftar tiket menggabungkan tiket n8n dan tiket Shopee. Alur Open → In Progress → Resolved, kategori, dan balasan sama seperti tiket lain.
+- Balasan Shopee tidak langsung terkirim: masuk antrean lalu dikirim oleh tablet bridge (biasanya beberapa detik). Tanda ⏳ = masih antre, ⚠️ = gagal terkirim. Auto reply Shopee ditandai 🤖 dan tidak dihitung sebagai balasan agent.
+- Judul daftar menampilkan status penghubung: *Shopee tersambung*, *Penghubung Shopee offline* (tidak ada heartbeat 3 menit), atau *login ulang Duoke*.
+- Kunci agent harus didaftarkan sekali di Supabase (fungsi `tiket_agent_set_key`, hanya service role). Kalau belum, tiket Shopee tidak tampil dan tiket n8n tetap normal.
+- Notifikasi latar belakang di APK (NotifBg) masih hanya untuk tiket n8n.
+
 ## Info pelanggan dan reset PIN Nuvera Kasir
 
 Di detail tiket (mode live) ada kartu **Pelanggan**: usaha, paket, lisensi (samar), masa berlaku, email akun, HP, versi app. Datanya dari tab `POS Registrasi` lewat aksi `customer`.

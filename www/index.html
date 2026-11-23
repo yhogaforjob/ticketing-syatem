@@ -574,7 +574,43 @@ const appOf = a => APPS[a] || { name: a || '?', c: '#334155', b: '#E2E8F0' };
 const catN = k => (CATS[k] && CATS[k].n) || k || 'Lainnya';
 const initials = () => ((CFG && CFG.agent) || 'Agent').split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
+/* ---------- Sumber kedua: chat Shopee (Duoke → tablet bridge → Supabase) ----------
+   Tiket Shopee berkode SHP-xxxxx. Semua aksi (list/get/open/reply/solve/category) untuk kode itu
+   dikirim ke RPC Supabase `tiket_agent` dengan kunci agent yang sama. Anon key aman di klien:
+   tabel tiket hanya bisa diakses lewat RPC yang memeriksa hash kunci agent. */
+const SB_URL = 'https://rmisinoztpqduzbufsrp.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtaXNpbm96dHBxZHV6YnVmc3JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ0NjMxNDksImV4cCI6MjExMDAzOTE0OX0.H142_WmEj85Yt_8fLMIz3rThNmvKY8nlBbiht-GfVO8';
+const isSB = id => /^SHP-/.test(id || '');
+let SB_OK = null, SB_ROWS = [], BRIDGES = [];
+async function sb(action, p) {
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const r = await fetch(SB_URL + '/rest/v1/rpc/tiket_agent', { method: 'POST', signal: ctl.signal,
+      headers: { apikey: SB_ANON, Authorization: 'Bearer ' + SB_ANON, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_key: CFG.key, p_action: action, p: Object.assign({ agent: CFG.agent }, p || {}) }) });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const j = await r.json();
+    if (j && j.code === 'key') SB_OK = false; // kunci belum terdaftar untuk Shopee: sembunyikan saja, jangan logout
+    else if (j && j.ok) SB_OK = true;
+    return j || { ok: false };
+  } finally { clearTimeout(to); }
+}
+async function sbList() {
+  try {
+    const j = await sb('list');
+    if (j.ok) { SB_ROWS = j.tickets || []; BRIDGES = j.bridges || []; }
+    else if (j.code === 'key') { SB_ROWS = []; BRIDGES = []; }
+  } catch (e) { /* offline: pakai data Shopee terakhir */ }
+  return SB_ROWS;
+}
+function bridgeTxt() {
+  if (MODE !== 'live' || !SB_OK || !BRIDGES.length) return '';
+  if (BRIDGES.some(b => b.status === 'online')) return ' · Shopee tersambung';
+  return BRIDGES.some(b => b.status === 'login_required') ? ' · <b>Shopee: login ulang Duoke</b>' : ' · <b>Penghubung Shopee offline</b>';
+}
+
 async function api(action, p) {
+  if (p && isSB(p.ticket)) return sb(action, p);
   const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
   try {
     const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -647,6 +683,7 @@ function initLive(m) {
   CATS = {}; cats.forEach(c => { CATS[c.category] = { n: c.label || c.category, k: [] }; });
   if (!CATS.lain) CATS.lain = { n: 'Lainnya', k: [] };
   CAT_ORDER = Object.keys(CATS);
+  if (!APPS.shopee) APPS.shopee = { name: 'Shopee', c: '#D73211', b: '#FFE9E3' };
   S = { next: 0, tickets: [] }; loaded = false; listSig = ''; seen.clear(); tab = 'open'; src = 'all';
 }
 
@@ -675,10 +712,11 @@ async function refreshList() {
   if (MODE !== 'live' || listBusy || document.hidden || !(isWide() || view === 'list' || view === 'dash')) return;
   listBusy = true;
   try {
-    const j = await api('list');
+    const [j, sbRows] = await Promise.all([api('list'), sbList()]);
     if (!j.ok) return;
+    const rows = j.tickets.concat(sbRows);
     const old = new Map(S.tickets.map(t => [t.id, t]));
-    const next = j.tickets.map(r => {
+    const next = rows.map(r => {
       const t = fromRow(r), o = old.get(t.id);
       if (o && busy.has(t.id)) return o;
       if (o) { t.msgs = o.msgs; t.mv = o.mv; t.rd = o.rd; t.nw = o.nw; t.waitFrom = o.waitFrom; }
@@ -691,7 +729,7 @@ async function refreshList() {
     const replied = loaded ? next.filter(t => { const o = old.get(t.id); return o && t.status === 'progress' && t.lastFrom === 'c' && o.lastFrom !== 'c' && !(detailVisible() && current === t.id); }) : [];
     const fresh = loaded ? next.filter(t => t.status === 'open' && !seen.has(t.id)) : [];
     next.forEach(t => seen.add(t.id));
-    const sig = j.tickets.map(r => [r.ticket_id, r.status, r.category, r.last_message_at, r.last_sender, r.last_text].join('|')).join('~');
+    const sig = rows.map(r => [r.ticket_id, r.status, r.category, r.last_message_at, r.last_sender, r.last_text].join('|')).join('~') + bridgeTxt();
     const changed = sig !== listSig || !loaded;
     S.tickets = next; listSig = sig; loaded = true;
     if (changed) { if (isWide()) { renderListKeep(); if (view === 'dash') renderDash(); } else if (view === 'list' || view === 'dash') renderKeepScroll(); }
@@ -840,7 +878,7 @@ function renderList() {
   }
   const emptyTxt = { open: 'Tidak ada tiket baru.<br>Chat masuk dari semua aplikasi akan muncul di sini.', progress: 'Belum ada tiket yang sedang ditangani.', resolved: 'Belum ada tiket yang selesai.' }[tab];
   $('#view').innerHTML = `<div class="screen">
-    <div class="hero"><div class="row"><div class="grow"><span class="cap">Nuvera Helpdesk</span><h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
+    <div class="hero"><div class="row"><div class="grow"><span class="cap">Nuvera Helpdesk</span><h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
     <div class="pull"><div class="tabs" role="tablist">${['open', 'progress', 'resolved'].map(k => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${STATUS[k]}<span class="n">${cnt(k)}</span>${k === 'progress' ? `<i class="wd${pool.some(waiting) ? ' on' : ''}" aria-hidden="true"></i>` : ''}</button>`).join('')}</div></div>
     <div class="chips" aria-label="Filter aplikasi sumber"><button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua aplikasi</button>${Object.keys(APPS).map(k => `<button class="fc" style="--c:${appOf(k).c}" data-src="${k}" aria-pressed="${src === k}"><i></i>${esc(appOf(k).name)}</button>`).join('')}</div>
     <div class="list">${items.length ? (listHtml || items.map(card).join('')) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`}${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}</div>
