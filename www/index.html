@@ -663,6 +663,52 @@ body{background:#EEF0EC;color:#111}
 .dashv{--lime:#C4DD8C;--pri:#2E4A3C}
 .dashv .seg2 button[aria-pressed=true]{background:#2E4A3C}
 @media (prefers-reduced-motion:reduce){.kc{transition:none}}
+
+/* ===== Comet v4 ===== */
+/* 1. layar penuh, tanpa sisa ruang di luar */
+@media (min-width:900px){
+  .lgwrap{padding:0;background:#111}
+  .lg{min-height:100dvh;border-radius:0}
+}
+@media (min-width:1100px){
+  body{padding:0;background:#111}
+  .app,.app.desk{height:100dvh;max-width:none;border-radius:0}
+  .app.lgm{height:100dvh}
+  .app.lgm .lg{min-height:100dvh}
+}
+/* 2. menu: status = kontrol segmen, chip konsisten */
+.tabs{background:var(--mint);padding:3px;border-radius:99px;gap:2px}
+.tab{color:var(--mu);font-weight:700;padding:8px 14px}
+.tab .n{background:transparent;color:var(--mu);min-width:auto;padding:0 2px;font-weight:800}
+.tab[aria-selected=true]{background:#111;color:#fff}
+.tab[aria-selected=true] .n{background:var(--lime);color:#111;min-width:20px;padding:0 6px}
+.tab .wd{box-shadow:none}
+.fc .cn{background:var(--mint);color:#111}
+.fc[aria-pressed=true] .cn{background:var(--lime);color:#111}
+.fc.fl{color:#D92D20}.fc.fl .cn{background:#FDE8E6;color:#D92D20}
+.fc.fl[aria-pressed=true]{background:#D92D20;border-color:#D92D20;color:#fff}.fc.fl[aria-pressed=true] .cn{background:#fff;color:#D92D20}
+.gtools .tabs{flex:none}
+#app .tabs .tab{padding:8px 14px;gap:7px;font-size:13px;flex:none;white-space:nowrap}
+#app .tabs .tab .wd{display:none}
+@media (max-width:600px){#app .pull .tabs{display:flex}#app .pull .tabs .tab{flex:1;padding:8px 6px;font-size:12.5px}}
+/* 3. tag SLA */
+.ktag{font-weight:800}
+.sl-dark{background:#111;color:#fff}
+.sl-warn{background:#F5B100;color:#111}
+.sl-bad{background:#D92D20;color:#fff}
+.sl-mut{background:#E3E6E0;color:#4A4F48}
+.sl-ok{background:#DCFCE7;color:#166534}
+.kdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.kc{min-width:0;overflow:hidden}.kgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:601px){.kgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}}
+/* 4. dashboard segera hadir */
+.soonv{display:grid;place-items:center;background:#fff}
+.soonc{text-align:center;max-width:360px;padding:40px 24px}
+.soonc img{width:72px;height:72px}
+.soonc h1{margin:12px 0 8px;font-size:28px;font-weight:800;letter-spacing:-.02em}
+.soonb{display:inline-block;background:var(--lime);color:#111;font-size:12px;font-weight:800;padding:4px 12px;border-radius:99px}
+.soonc p{color:var(--mu);line-height:1.55;margin:14px 0 22px}
+.soonc .solve{height:48px;padding:0 24px;width:auto;display:inline-flex}
 </style>
 </head>
 <body>
@@ -1257,7 +1303,7 @@ function card(t) {
 function renderList() {
   const pool = S.tickets.filter(t => src === 'all' || t.app === src);
   const cnt = k => pool.filter(t => t.status === k).length;
-  let items = pool.filter(t => t.status === tab);
+  let items = pool.filter(t => t.status === tab && (!LATE || slaInfo(t).cls === 'bad'));
   items.sort((a, b) => tab === 'resolved' ? b.resolvedAt - a.resolvedAt : (tab === 'progress' ? (lastInfo(b).at || 0) - (lastInfo(a).at || 0) : a.createdAt - b.createdAt));
   const total = items.length; if (tab === 'resolved') items = items.slice(0, 25);
   let listHtml;
@@ -1312,15 +1358,27 @@ function renderDetail() {
 
 const greet = () => { const h = new Date().getHours(); return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam'; };
 const isDesk = () => $('#app').classList.contains('desk');
+let LATE = false;
 function srcChips() {
   const n = k => S.tickets.filter(t => t.status === tab && (k === 'all' || t.app === k)).length;
   const keys = Object.keys(APPS).filter(k => n(k) > 0 || k === src);
-  return `<button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua <span class="cn">${n('all')}</span></button>` + keys.map(k => `<button class="fc" data-src="${k}" aria-pressed="${src === k}">${esc(appOf(k).name)} <span class="cn">${n(k)}</span></button>`).join('');
+  const late = S.tickets.filter(t => t.status === tab && (src === 'all' || t.app === src) && slaInfo(t).cls === 'bad').length;
+  return `<button class="fc" data-src="all" aria-pressed="${src === 'all' && !LATE}">Semua <span class="cn">${n('all')}</span></button>` + keys.map(k => `<button class="fc" data-src="${k}" aria-pressed="${src === k && !LATE}">${esc(appOf(k).name)} <span class="cn">${n(k)}</span></button>`).join('')
+    + (tab !== 'resolved' ? `<button class="fc fl" data-late="1" aria-pressed="${LATE}">Lewat SLA <span class="cn">${late}</span></button>` : '');
 }
 function connPill() {
   if (MODE !== 'live' || !SB_OK || !BRIDGES.length) return '';
   const on = BRIDGES.some(b => b.status === 'online'), lg = BRIDGES.some(b => b.status === 'login_required');
   return `<button class="cpill" data-act="conn"><i style="background:${on ? '#2DB36B' : '#D92D20'}"></i>${on ? 'Shopee tersambung' : lg ? 'Shopee: login ulang' : 'Shopee terputus'}</button>`;
+}
+function slaInfo(t, now) {
+  now = now || Date.now();
+  if (t.status === 'resolved') return { cls: 'ok', txt: 'Selesai' };
+  const w = waiting(t), since = t.status === 'open' ? t.createdAt : (w ? pend(t).since : null);
+  if (since == null) return { cls: 'mut', txt: 'Ditangani' };
+  const el = now - since, m = v => Math.max(1, Math.round(v / 60e3)) + 'm';
+  if (el > SLA_CRIT) return { cls: 'bad', txt: 'Lewat ' + m(el - SLA_CRIT) };
+  return { cls: el > SLA_WARN ? 'warn' : 'dark', txt: 'SLA ' + m(SLA_CRIT - el) };
 }
 function kcard(t) {
   const d = durs(t, Date.now()), last = t.msgs[t.msgs.length - 1], w = waiting(t), un = w && unread(t), pd = w ? pend(t) : null;
@@ -1329,8 +1387,8 @@ function kcard(t) {
   const tm = w ? `<span class="kw crit2" data-t="${t.id}:wait"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>membalas · <span class="v">${fmt(Date.now() - pd.since)}</span></span>`
     : `<span class="kw" data-t="${t.id}:${kind}" data-sla="${t.status === 'open' ? t.id : ''}"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${t.status === 'open' ? 'menunggu' : t.status === 'progress' ? 'ditangani' : 'selesai'} <span class="v">${fmt(d[kind])}</span></span>`;
   return `<button class="kc${w ? ' wait' : ''}" data-open="${t.id}" aria-label="Tiket ${t.id} dari ${esc(t.cust)}, ${esc(a.name)}, ${STATUS[t.status]}">
-    <div class="kp"><span class="ktag" style="background:${a.b};color:${a.c}">${esc(a.name)}</span>${un ? `<span class="kun">${pd.n > 99 ? '99+' : pd.n}</span>` : ''}<div class="km"><span class="kav">${ini}</span><div class="kb">${esc(last ? last.t : (t.snip || ''))}</div></div></div>
-    <div class="kn"><b>${esc(t.cust)}</b><small>${esc(catN(t.cat))} · ${t.id}</small></div>${tm}<span class="kbtn">Buka chat</span></button>`;
+    <div class="kp">${(sl => `<span class="ktag sl-${sl.cls}" data-sl="${t.id}">${sl.txt}</span>`)(slaInfo(t))}${un ? `<span class="kun">${pd.n > 99 ? '99+' : pd.n}</span>` : ''}<div class="km"><span class="kav">${ini}</span><div class="kb">${esc(last ? last.t : (t.snip || ''))}</div></div></div>
+    <div class="kn"><b>${esc(t.cust)}</b><small><i class="kdot" style="background:${a.c}"></i>${esc(a.name)} · ${esc(catN(t.cat))}</small></div>${tm}<span class="kbtn">Buka chat</span></button>`;
 }
 const gridMode = () => isDesk() && view !== 'dash' && !detailVisible();
 const isShp = t => t.app === 'shopee' || t.app === 'dk' || isSB(t.id);
@@ -1353,7 +1411,7 @@ function trow(t) {
 function renderGrid() {
   const pool = S.tickets.filter(t => src === 'all' || t.app === src);
   const cnt = k => pool.filter(t => t.status === k).length;
-  let items = pool.filter(t => t.status === tab);
+  let items = pool.filter(t => t.status === tab && (!LATE || slaInfo(t).cls === 'bad'));
   items.sort((x, y) => tab === 'resolved' ? y.resolvedAt - x.resolvedAt : (tab === 'progress' ? (lastInfo(y).at || 0) - (lastInfo(x).at || 0) : x.createdAt - y.createdAt));
   const total = items.length; if (tab === 'resolved') items = items.slice(0, 30);
   const now = Date.now(), opens = S.tickets.filter(t => t.status === 'open').sort((x, y) => x.createdAt - y.createdAt), oldest = opens[0];
@@ -1383,6 +1441,9 @@ function renderGrid() {
 }
 
 function renderDash() {
+  rightEl().innerHTML = `<div class="screen soonv"><div class="soonc"><img src="comet.png" alt=""><h1>Dashboard</h1><span class="soonb">SOON</span><p>Ringkasan SLA, tren komplain, dan performa tim segera hadir.</p><button class="solve" data-nav="list">Kembali ke Inbox</button></div></div>`;
+}
+function renderDashFull() {
   const T = S.tickets, c = k => T.filter(t => t.status === k).length, now = Date.now(), D = Number(per) || 7, P = D * 864e5;
   const opens = T.filter(t => t.status === 'open').sort((a, b) => a.createdAt - b.createdAt), oldest = opens[0];
   const late = opens.filter(t => now - t.createdAt > SLA_CRIT);
@@ -1581,9 +1642,10 @@ function reply(text) {
 document.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.open) return openTicket(b.dataset.open);
-  if (b.dataset.tab) { tab = b.dataset.tab; return isWide() ? renderListKeep() : render(); }
+  if (b.dataset.tab) { tab = b.dataset.tab; LATE = false; return isWide() ? renderListKeep() : render(); }
   if (b.dataset.lay) { LAYOUT = b.dataset.lay === 'list' ? 'list' : 'card'; try { localStorage.setItem('comet-layout', LAYOUT); } catch (e) {} return isWide() ? renderListKeep() : render(); }
-  if (b.dataset.src) { src = b.dataset.src; return isWide() ? renderListKeep() : render(); }
+  if (b.dataset.late) { LATE = !LATE; return isWide() ? renderListKeep() : render(); }
+  if (b.dataset.src) { LATE = false; src = b.dataset.src; return isWide() ? renderListKeep() : render(); }
   if (b.dataset.per) { per = b.dataset.per; return isWide() ? renderDash() : render(); }
   if (b.dataset.nav) { if (isDesk() && b.dataset.nav !== 'dash') current = null; return go(b.dataset.nav === 'dash' ? 'dash' : 'list'); }
   const a = b.dataset.act;
@@ -1616,6 +1678,7 @@ function tick() {
     const v = el.querySelector('.v') || el; if (v.textContent !== txt) v.textContent = txt;
     if (el.dataset.sla) { el.classList.toggle('crit', dd.open > SLA_CRIT); el.classList.toggle('warn', dd.open > SLA_WARN && dd.open <= SLA_CRIT); }
   });
+  document.querySelectorAll('[data-sl]').forEach(el => { const t = find(el.dataset.sl); if (!t) return; const i = slaInfo(t, now), c = 'ktag sl-' + i.cls; if (el.className !== c) el.className = c; if (el.textContent !== i.txt) el.textContent = i.txt; });
   const lg = document.querySelector('[data-longest]');
   if (lg) { const o = S.tickets.filter(t => t.status === 'open').map(t => now - t.createdAt).sort((a, b) => b - a)[0]; lg.textContent = o == null ? '—' : fmtLong(o); }
 }
