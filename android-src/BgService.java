@@ -1,4 +1,4 @@
-package id.nuvera.tiket;
+package id.dutakasir.tiket;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -47,7 +47,7 @@ public class BgService extends Service {
         SharedPreferences p = getSharedPreferences(PREFS, MODE_PRIVATE);
         if (!p.getBoolean("on", false) || p.getString("key", "").isEmpty()) { stopSelf(); return START_NOT_STICKY; }
         channels();
-        Notification n = base().setContentTitle("Tiket Nuvera aktif")
+        Notification n = base().setContentTitle("Tiket Duta Kasir aktif")
                 .setContentText("Memantau tiket dan chat baru")
                 .setOngoing(true).build();
         try {

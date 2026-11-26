@@ -2,7 +2,7 @@
   "name": "ticketing-system",
   "version": "1.0.0",
   "private": true,
-  "description": "Aplikasi tiket Nuvera (sisi agent) - web + APK Android lewat Capacitor",
+  "description": "Aplikasi tiket Duta Kasir (sisi agent) - web + APK Android lewat Capacitor",
   "scripts": {
     "sync": "cap sync android"
   },

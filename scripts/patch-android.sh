@@ -29,8 +29,8 @@ fi
 grep -q windowSoftInputMode "$MANIFEST" || echo "PERINGATAN: windowSoftInputMode tidak terpasang" >&2
 
 # 5. Pembaruan dalam aplikasi: izin pasang APK, plugin native, FileProvider, versionCode
-APPID=id.nuvera.tiket
-JAVA=android/app/src/main/java/id/nuvera/tiket
+APPID=id.dutakasir.tiket
+JAVA=android/app/src/main/java/id/dutakasir/tiket
 if ! grep -q REQUEST_INSTALL_PACKAGES "$MANIFEST"; then
   sed -i 's|</manifest>|    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />\n</manifest>|' "$MANIFEST"
 fi
@@ -46,7 +46,7 @@ cat > "$RES/xml/file_paths.xml" <<'XML'
 XML
 cp android-src/ApkInstaller.java android-src/BgService.java android-src/BootReceiver.java android-src/NotifBg.java "$JAVA/"
 cat > "$JAVA/MainActivity.java" <<'JAVA'
-package id.nuvera.tiket;
+package id.dutakasir.tiket;
 
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;
@@ -65,7 +65,7 @@ for PERM in POST_NOTIFICATIONS FOREGROUND_SERVICE FOREGROUND_SERVICE_SPECIAL_USE
   grep -q "android.permission.$PERM\"" "$MANIFEST" || sed -i "s|</manifest>|    <uses-permission android:name=\"android.permission.$PERM\" />\n</manifest>|" "$MANIFEST"
   grep -q "android.permission.$PERM\"" "$MANIFEST" || { echo "GAGAL: izin $PERM tidak terpasang" >&2; exit 1; }
 done
-if ! grep -q 'id.nuvera.tiket.BgService\|\.BgService' "$MANIFEST"; then
+if ! grep -q 'id.dutakasir.tiket.BgService\|\.BgService' "$MANIFEST"; then
   sed -i 's|</application>|        <service android:name=".BgService" android:exported="false" android:foregroundServiceType="specialUse">\n            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="Memantau tiket dan chat baru dari server sendiri" />\n        </service>\n        <receiver android:name=".BootReceiver" android:exported="true">\n            <intent-filter>\n                <action android:name="android.intent.action.BOOT_COMPLETED" />\n                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />\n            </intent-filter>\n        </receiver>\n    </application>|' "$MANIFEST"
 fi
 grep -q '\.BgService' "$MANIFEST" || { echo "GAGAL: BgService tidak terpasang di manifest" >&2; exit 1; }

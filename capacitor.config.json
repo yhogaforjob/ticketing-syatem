@@ -1,6 +1,6 @@
 {
-  "appId": "id.nuvera.tiket",
-  "appName": "Tiket Nuvera",
+  "appId": "id.dutakasir.tiket",
+  "appName": "Tiket Duta Kasir",
   "webDir": "www",
   "server": {
     "androidScheme": "https"

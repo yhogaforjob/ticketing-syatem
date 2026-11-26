@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0A4D43">
-<title>Tiket Nuvera</title>
+<title>Tiket Duta Kasir</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -823,7 +823,7 @@ async function catLive(t, k) {
 
 function renderLogin() {
   $('#view').innerHTML = `<div class="screen">
-    <div class="hero" style="padding-bottom:70px"><span class="cap">Nuvera Helpdesk</span><h1>Masuk Agent</h1><p>Hubungkan aplikasi ke sistem tiket.</p></div>
+    <div class="hero" style="padding-bottom:70px"><span class="cap">Duta Kasir Helpdesk</span><h1>Masuk Agent</h1><p>Hubungkan aplikasi ke sistem tiket.</p></div>
     <div class="dbody ctr" style="margin-top:-40px"><div class="box">
       <label class="hint" for="lg-name" style="font-weight:700">Nama agent</label>
       <div class="cin" style="margin:6px 0 14px"><input id="lg-name" type="text" autocomplete="off" placeholder="Contoh: Yhoga"></div>
@@ -836,7 +836,7 @@ function renderLogin() {
 }
 function renderBoot(msg, retry) {
   $('#view').innerHTML = `<div class="screen">
-    <div class="hero" style="padding-bottom:70px"><span class="cap">Nuvera Helpdesk</span><h1>Tiket Customer</h1><p>${esc(msg)}</p></div>
+    <div class="hero" style="padding-bottom:70px"><span class="cap">Duta Kasir Helpdesk</span><h1>Tiket Customer</h1><p>${esc(msg)}</p></div>
     ${retry ? '<div class="dbody ctr" style="margin-top:-30px"><button class="solve" type="button" data-act="retry">Coba lagi</button><button class="demo" style="margin-top:14px" data-act="logout">Keluar</button></div>' : ''}
   </div>`;
 }
@@ -878,7 +878,7 @@ function renderList() {
   }
   const emptyTxt = { open: 'Tidak ada tiket baru.<br>Chat masuk dari semua aplikasi akan muncul di sini.', progress: 'Belum ada tiket yang sedang ditangani.', resolved: 'Belum ada tiket yang selesai.' }[tab];
   $('#view').innerHTML = `<div class="screen">
-    <div class="hero"><div class="row"><div class="grow"><span class="cap">Nuvera Helpdesk</span><h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
+    <div class="hero"><div class="row"><div class="grow"><span class="cap">Duta Kasir Helpdesk</span><h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
     <div class="pull"><div class="tabs" role="tablist">${['open', 'progress', 'resolved'].map(k => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${STATUS[k]}<span class="n">${cnt(k)}</span>${k === 'progress' ? `<i class="wd${pool.some(waiting) ? ' on' : ''}" aria-hidden="true"></i>` : ''}</button>`).join('')}</div></div>
     <div class="chips" aria-label="Filter aplikasi sumber"><button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua aplikasi</button>${Object.keys(APPS).map(k => `<button class="fc" style="--c:${appOf(k).c}" data-src="${k}" aria-pressed="${src === k}"><i></i>${esc(appOf(k).name)}</button>`).join('')}</div>
     <div class="list">${items.length ? (listHtml || items.map(card).join('')) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`}${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}</div>
@@ -940,7 +940,7 @@ function renderDash() {
       <div class="m">${top.length ? 'Terbanyak:' + top.map(([ck, n]) => `<span class="flag">${FLAG}${catN(ck)} · ${n}</span>`).join('') : 'Belum ada komplain'}</div></div>`;
   }).join('');
   rightEl().innerHTML = `<div class="screen">
-    <div class="hero"><div class="row"><div class="grow"><span class="cap">Nuvera Helpdesk</span><h1>Dashboard</h1><p>Ringkasan semua aplikasi</p></div></div></div>
+    <div class="hero"><div class="row"><div class="grow"><span class="cap">Duta Kasir Helpdesk</span><h1>Dashboard</h1><p>Ringkasan semua aplikasi</p></div></div></div>
     <div class="dbody" style="margin-top:-26px">
     <div class="seg" role="group" aria-label="Periode"><button data-per="1" aria-pressed="${per === '1'}">24 jam</button><button data-per="7" aria-pressed="${per === '7'}">7 hari</button></div>
     <div class="tiles"><div class="tile t-open"><b>${c('open')}</b><small>Open</small></div><div class="tile t-progress"><b>${c('progress')}</b><small>In Progress</small></div><div class="tile t-resolved"><b>${c('resolved')}</b><small>Resolved</small></div></div>
@@ -984,15 +984,15 @@ window.matchMedia('(min-width:768px)').addEventListener('change', () => render()
 window.matchMedia('(min-width:1100px)').addEventListener('change', () => render());
 function go(v, id) { view = v; if (id) { current = id; const t0 = find(id); if (t0 && v === 'detail') { markRead(t0); if (window.matchMedia('(min-width:768px)').matches) tab = t0.status; } } render(); if (MODE === 'live' && (v === 'list' || v === 'dash')) refreshList(); }
 
-/* ======================= PELANGGAN + RESET PIN (Nuvera Kasir) ======================= */
+/* ======================= PELANGGAN + RESET PIN (Duta Kasir) ======================= */
 const CUST = {};
 function custHtml(t) {
-  if (MODE !== 'live' || t.app !== 'nv') return ''; // data perangkat hanya ada untuk Nuvera Kasir
+  if (MODE !== 'live' || t.app !== 'nv') return ''; // data perangkat hanya ada untuk Duta Kasir
   const c = CUST[t.id];
   if (!c || c.loading) return '<div class="cust" id="cust"><span class="hint">Memuat data pelanggan…</span></div>';
   if (c.err) return '<div class="cust" id="cust"><span class="hint">Data pelanggan gagal dimuat. <button class="lnk2" data-act="cust-retry">Coba lagi</button></span></div>';
   const d = c.data;
-  if (!d) return '<div class="cust" id="cust"><span class="hint"><b>Perangkat belum terdaftar.</b> HP pelanggan belum memakai Nuvera Kasir v0.2.24 ke atas atau belum pernah online, jadi kode reset PIN belum bisa dibuat.</span></div>';
+  if (!d) return '<div class="cust" id="cust"><span class="hint"><b>Perangkat belum terdaftar.</b> HP pelanggan belum memakai Duta Kasir v0.2.24 ke atas atau belum pernah online, jadi kode reset PIN belum bisa dibuat.</span></div>';
   const kv = [['Usaha', d.nama_usaha], ['Paket', [d.tipe_paket, d.lisensi_status].filter(Boolean).join(' · ')], ['Lisensi', d.lisensi_masked], ['Berlaku s/d', d.masa_berlaku_sampai], ['Email akun', d.email_akun],
     ['HP', [d.model_hp, d.os_android && 'Android ' + d.os_android].filter(Boolean).join(' · ')], ['Versi app', d.versi_app], ['Terakhir aktif', d.terakhir_aktif], ['Status reset', d.status_reset]]
     .filter(r => r[1]).map(r => `<div class="kv"><span>${r[0]}</span><b>${esc(r[1])}</b></div>`).join('');
@@ -1049,7 +1049,7 @@ function rsCopy() {
 function rsSend() {
   const t = RS && find(RS.tid); if (!t || !RS.code) return;
   if (t.status !== 'progress') return toast('Tiket ini sudah selesai');
-  const txt = `Kode reset PIN manager Anda: ${RS.code}. Berlaku sampai ${RS.exp} WIB dan hanya bisa dipakai sekali. Di Nuvera Kasir, buka layar PIN, ketuk "Lupa?", masukkan kode ini lalu buat PIN baru. Jangan bagikan kode ini ke siapa pun.`;
+  const txt = `Kode reset PIN manager Anda: ${RS.code}. Berlaku sampai ${RS.exp} WIB dan hanya bisa dipakai sekali. Di Duta Kasir, buka layar PIN, ketuk "Lupa?", masukkan kode ini lalu buat PIN baru. Jangan bagikan kode ini ke siapa pun.`;
   closeSheet(); replyLive(t, txt);
 }
 document.addEventListener('change', e => {

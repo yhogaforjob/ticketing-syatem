@@ -1,4 +1,4 @@
-package id.nuvera.tiket;
+package id.dutakasir.tiket;
 
 import android.Manifest;
 import android.app.NotificationManager;

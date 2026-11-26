@@ -1,6 +1,6 @@
-# Tiket Nuvera
+# Tiket Duta Kasir
 
-Aplikasi tiket sisi agent untuk menangani chat bantuan customer dari aplikasi-aplikasi Nuvera.
+Aplikasi tiket sisi agent untuk menangani chat bantuan customer dari aplikasi-aplikasi Duta Kasir.
 Satu kode (`www/index.html`) dipakai untuk web dan APK Android (dibungkus Capacitor).
 
 - Status tiket: **Open → In Progress → Resolved**, dengan durasi berjalan dan total durasi.
@@ -11,8 +11,8 @@ Satu kode (`www/index.html`) dipakai untuk web dan APK Android (dibungkus Capaci
 ## Cara kerja
 
 ```
-App Nuvera ──form──▶ n8n /nuvera-tiket ──▶ Google Sheet (tickets, messages)
-App Nuvera ──chat──▶ n8n /nuvera-chat  ──▶ Google Sheet
+App Duta Kasir ──form──▶ n8n /dutakasir-tiket ──▶ Google Sheet (tickets, messages)
+App Duta Kasir ──chat──▶ n8n /dutakasir-chat  ──▶ Google Sheet
 Aplikasi ini ──────▶ n8n /tiket-agen   ──▶ Google Sheet
 ```
 
@@ -35,16 +35,16 @@ Balasan agent ─▶ tiket_outbox ─▶ tablet bridge ─▶ Duoke ─▶ Shope
 - Kunci agent harus didaftarkan sekali di Supabase (fungsi `tiket_agent_set_key`, hanya service role). Kalau belum, tiket Shopee tidak tampil dan tiket n8n tetap normal.
 - Notifikasi latar belakang di APK (NotifBg) masih hanya untuk tiket n8n.
 
-## Info pelanggan dan reset PIN Nuvera Kasir
+## Info pelanggan dan reset PIN Duta Kasir
 
 Di detail tiket (mode live) ada kartu **Pelanggan**: usaha, paket, lisensi (samar), masa berlaku, email akun, HP, versi app. Datanya dari tab `POS Registrasi` lewat aksi `customer`.
 Tombol **Buat kode reset PIN** (aksi `reset`) meminta agent mencentang minimal 2 data yang cocok dengan pelanggan, lalu membuat kode 6 angka (30 menit, sekali pakai) yang bisa disalin atau dikirim ke chat.
-Perangkat yang belum terdaftar (Nuvera Kasir di bawah v0.2.24) tidak punya data, jadi tombolnya tidak muncul. Butuh workflow n8n satu flow `n8n-workflow-nuvera-satu-flow.json` (repo Nusavera-Digital---POS, folder docs/ticketing).
+Perangkat yang belum terdaftar (Duta Kasir di bawah v0.2.24) tidak punya data, jadi tombolnya tidak muncul. Butuh workflow n8n satu flow `n8n-workflow-dutakasir-satu-flow.json` (repo Nusavera-Digital---POS, folder docs/ticketing).
 
 ## Memasang APK
 
 1. Buka halaman **Releases** repo ini, rilis **APK terbaru**.
-2. Unduh `tiket-nuvera.apk` di ponsel Android, lalu buka. Izinkan "pasang dari sumber ini" bila diminta.
+2. Unduh `tiket-dutakasir.apk` di ponsel Android, lalu buka. Izinkan "pasang dari sumber ini" bila diminta.
 3. Saat pertama dibuka, isi **nama agent** dan **kunci agent** (nilai `AK` di node "Cek agen" pada workflow n8n).
    Kunci hanya disimpan di perangkat. Tombol **mode demo** tersedia untuk mencoba tanpa server.
 

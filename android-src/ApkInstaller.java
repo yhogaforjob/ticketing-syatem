@@ -1,4 +1,4 @@
-package id.nuvera.tiket;
+package id.dutakasir.tiket;
 
 import android.content.Context;
 import android.content.Intent;
@@ -56,7 +56,7 @@ public class ApkInstaller extends Plugin {
                 try {
                     File dir = new File(ctx.getCacheDir(), "update");
                     if (!dir.exists() && !dir.mkdirs()) throw new Exception("folder cache gagal dibuat");
-                    File out = new File(dir, "tiket-nuvera.apk");
+                    File out = new File(dir, "tiket-dutakasir.apk");
                     if (out.exists()) out.delete();
 
                     HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
