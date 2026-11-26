@@ -39,7 +39,7 @@ Balasan agent ─▶ tiket_outbox ─▶ tablet bridge ─▶ Duoke ─▶ Shope
 
 Di detail tiket (mode live) ada kartu **Pelanggan**: usaha, paket, lisensi (samar), masa berlaku, email akun, HP, versi app. Datanya dari tab `POS Registrasi` lewat aksi `customer`.
 Tombol **Buat kode reset PIN** (aksi `reset`) meminta agent mencentang minimal 2 data yang cocok dengan pelanggan, lalu membuat kode 6 angka (30 menit, sekali pakai) yang bisa disalin atau dikirim ke chat.
-Perangkat yang belum terdaftar (Duta Kasir di bawah v0.2.24) tidak punya data, jadi tombolnya tidak muncul. Butuh workflow n8n satu flow `n8n-workflow-dutakasir-satu-flow.json` (repo Nusavera-Digital---POS, folder docs/ticketing).
+Perangkat yang belum terdaftar (Duta Kasir di bawah v0.2.24) tidak punya data, jadi tombolnya tidak muncul. Butuh workflow n8n satu flow `n8n-workflow-dutakasir-satu-flow.json` (repo duta_kasir, folder docs/ticketing).
 
 ## Memasang APK
 
