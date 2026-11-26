@@ -412,6 +412,125 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
 @media (min-width:768px){.nfab{bottom:24px;right:16px}.app.dv .nfab{bottom:100px}}
 @media (min-width:1100px){.nfab{right:24px;bottom:24px}.app.dv .nfab{right:364px;bottom:100px}.nbub .nl{display:inline}.nbub .ns{display:none}}
 @media (prefers-reduced-motion:reduce){.mt,.st,.gl::before,.gl::after,.gb,.gj,.nr1,.nr2,.nimg{animation:none!important}.mt{opacity:0}.st{opacity:.4}.nr1,.nr2{opacity:0}}
+
+/* ===== Comet: layout desain (grid, 3 lapis, bento) ===== */
+.bnr{display:flex;gap:10px;align-items:center;padding:12px 16px;border-radius:14px;background:#FBEEEB;color:#A8392E;font-weight:700;font-size:13px;line-height:1.4}
+.bnr i{width:8px;height:8px;border-radius:50%;background:#D9786C;flex:none}
+.gs{font-size:12.5px;color:var(--mu);font-weight:600}
+.gridv,.dashv{padding:0 28px 24px;background:#fff}
+.gh{display:flex;align-items:center;gap:12px;padding:22px 0 14px}
+.gh h1,.dtop h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em}
+.gh .bell{background:#fff;border:1px solid var(--ln);color:var(--tx)}
+.gh+.bnr,.dtop+.bnr{margin-bottom:14px}
+.gbody{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.gtools{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gtools .tabs{flex:none;width:420px;box-shadow:none;background:var(--bg)}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.gtable .th,.trow{display:grid;grid-template-columns:1.2fr 1fr 2fr 110px 130px;gap:12px;align-items:center;padding:12px 16px;text-align:left;width:100%}
+.gtable .th{font-size:11.5px;font-weight:800;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding-top:4px;padding-bottom:6px}
+.trow{background:var(--bg);border-radius:14px;margin-bottom:6px}
+.trow:hover{background:#E6EBE0}
+.trow.wait{background:#27302E;color:#fff}.trow.wait .tc1 small,.trow.wait .timer small{color:#B9C7C2}.trow.wait .timer{color:#fff}
+.trow.sel{outline:2px solid var(--pri)}
+.tc1 b,.tc1 small{display:block}.tc1 small{color:var(--mu);font-size:12px}
+.tsn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:#3B4F49}.trow.wait .tsn{color:#fff;font-weight:700}
+.gaside{display:flex;flex-direction:column;gap:14px;position:sticky;top:14px}
+.gcard{background:#F5F7F3;border-radius:22px;padding:18px}
+.gcard h3{margin:0 0 10px;font-size:15px;font-weight:800}
+.gch{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}.gch h3{margin:0}
+.oq b{display:block;font-size:16px}.oq small{color:var(--mu);font-size:12px;font-weight:600}
+.oq p{margin:8px 0;color:#3B4F49;font-size:13px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.oq .timer{margin:2px 0 14px;font-size:22px}
+.chip-bad{background:#F3D4CF;color:#A8392E;font-weight:800;font-size:11.5px;padding:3px 10px;border-radius:99px}
+.lrow{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;background:#fff;border-radius:14px;padding:10px 12px;margin-top:8px}
+.lrow b{display:block;font-size:13px}.lrow small{color:var(--mu);font-size:12px}
+.alltk{display:block;color:var(--lime);font-weight:700;font-size:12.5px;margin:8px 0 2px}
+.dtop{display:flex;align-items:center;gap:12px;padding:22px 0 14px;flex-wrap:wrap}
+.dtop .seg2{margin-left:auto}
+.bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.bhero{grid-column:span 7;position:relative;overflow:hidden;background:linear-gradient(135deg,#2E3D36,#202B26);color:#fff;border-radius:22px;padding:20px 22px;display:flex;flex-direction:column;gap:6px;min-height:176px}
+.bhero::after{content:'';position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(242,120,80,.26),rgba(242,120,80,0) 70%);pointer-events:none}
+.bhero>*{position:relative;z-index:1}
+.bhero .lg2{position:absolute;right:22px;top:18px;width:64px;height:64px}
+.bhero .gr{font-size:13px;color:#A6ABA3;font-weight:600}
+.bhero .big{margin:0;font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.bhero p{margin:0;font-size:13px;color:#C3C8C0}
+.bh-f{display:flex;gap:14px;margin-top:auto;align-items:center;padding-top:12px}
+.segs{flex:1;display:flex;gap:5px}.segs i{flex:1;height:8px;border-radius:99px}
+.bbtn{height:40px;padding:0 18px;border-radius:99px;background:var(--lime);color:#1F2823;font-weight:800;font-size:13px;white-space:nowrap}
+.bcard{background:#F5F7F3;border-radius:22px;padding:16px 18px}
+.bring{grid-column:span 5;display:flex;align-items:center;gap:20px}
+.ring{width:120px;height:120px;border-radius:50%;flex:none;display:grid;place-items:center}
+.ring div{width:92px;height:92px;border-radius:50%;background:#F5F7F3;display:grid;place-items:center}
+.ring b{font-size:28px;letter-spacing:-.02em}
+.rt{display:flex;flex-direction:column;gap:6px}.rt b{font-size:15px}.rt span,.rt small{font-size:12.5px;font-weight:600;color:var(--mu)}
+.kpi{grid-column:span 4;display:flex;flex-direction:column;gap:6px;min-height:112px}
+.kpi span{font-size:12px;font-weight:700;color:var(--mu)}.kpi b{font-size:34px;letter-spacing:-.02em;line-height:1}.kpi em{font-style:normal;font-size:12px;font-weight:700;color:#4F7F3A}
+.kpi.k1{background:#E3EFC8}.kpi.k1 span{color:var(--tx)}
+.pb{height:8px;border-radius:99px;background:#E4E9DE}.pb i{display:block;height:8px;border-radius:99px;background:#6F8579}
+.bbar{grid-column:span 8}.bcat,.bhr{grid-column:span 4}
+.bside{grid-column:span 4;grid-row:span 2;display:flex;flex-direction:column;gap:14px}.bside .solve{margin-top:auto}
+.bch{display:flex;justify-content:space-between;align-items:center;gap:8px}.bch b{font-size:15px}
+.lgd{display:flex;gap:6px;align-items:center;font-size:12px;font-weight:600;color:var(--mu)}.lgd i{width:10px;height:10px;border-radius:3px;margin-left:8px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:160px;border-bottom:1px solid var(--ln);margin-top:12px}
+.bc{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;height:100%}.bs{border-radius:5px 5px 2px 2px}
+.bl{display:flex;gap:8px;margin-top:6px;font-size:11px;font-weight:600;color:var(--mu)}.bl span{flex:1;text-align:center}
+.bcat>b,.bside .bcard>b{font-size:15px}
+.cr>div{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-top:10px}
+.cr i{display:block;height:9px;border-radius:99px;background:#E4E9DE;margin-top:5px}.cr u{display:block;height:9px;border-radius:99px;background:#A9C97A;text-decoration:none}
+.hs{display:flex;gap:4px;margin-top:12px}.hs>div{flex:1;display:flex;flex-direction:column;gap:3px;align-items:center}
+.hs i{width:100%;height:34px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700}.hs span{font-size:10px;color:var(--mu);font-weight:600}
+.dashv .demo,.dashv .fine{margin-top:14px}
+@media (min-width:1100px){
+  .app.desk .rail{width:64px;padding:14px 0}
+  .rail .logo{margin-bottom:10px}
+  .rail .rb{width:44px;height:44px;padding:0;border-radius:12px;font-size:0;gap:0;justify-content:center;color:#8A948D}
+  .rail .rb svg.i{width:20px;height:20px}
+  .rail .rb:hover{background:rgba(255,255,255,.08);color:#fff}
+  .rail .rb[aria-current=page]{background:var(--lime);color:var(--dk)}
+  .rail .rb.wt::after{top:7px;right:7px}
+  .rail .bell{width:44px;height:44px;background:none;color:#8A948D}
+  .app.desk.gm .left{display:none}
+  .app.desk.gm .pane{background:#fff}
+  .app.desk:not(.gm) .left{width:300px}
+  .app.desk:not(.gm) .left .hero{padding:16px 18px 44px}
+  .app.desk:not(.gm) .left .hero h1{font-size:18px}
+  .app.desk:not(.gm) .left .hero p{display:none}
+  .app.desk:not(.gm) .left .chips{padding:12px 12px 2px}
+  .app.desk:not(.gm) .left .vt{display:none}
+  .app.desk:not(.gm) .left .card .badge{display:none}
+  .app.desk:not(.gm) .left .tab{font-size:11px;gap:3px;padding:9px 2px}
+  .app.desk:not(.gm) .left .tab .n{min-width:17px;height:17px;font-size:10px;padding:0 4px}
+  .app.desk:not(.gm) .left .tab .wd{display:none}
+}
+@media (max-width:1099px){
+  .gridv .gbody{grid-template-columns:1fr}
+}
+@media (max-width:899px){
+  .dashv{padding:0 16px 24px;background:var(--bg)}
+  .dtop{padding-top:calc(18px + env(safe-area-inset-top))}
+  .dtop .seg2{margin-left:0;width:100%;justify-content:space-between}.dtop .seg2 button{flex:1}
+  .bento>*{grid-column:1/-1!important;grid-row:auto!important}
+  .bhero .big{font-size:28px}
+  .kpi{grid-column:span 6!important}.kpi.k3{grid-column:1/-1!important}
+  .bcat,.bhr{grid-column:1/-1!important}
+  .bcard,.gcard{background:#fff}.ring div{background:#fff}
+}
+@media (max-width:600px){
+  .list:not(.compact){display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px 16px}
+  .list .sec,.list .empty,.list .more{grid-column:1/-1}
+  .list:not(.compact) .card{padding:12px;border-radius:18px}
+  .list:not(.compact) .card .r1 .badge,.list:not(.compact) .card .r3 .flags{display:none}
+  .list:not(.compact) .card .r3{justify-content:flex-end;margin-top:8px}
+  .list:not(.compact) .name{font-size:14px;margin-top:8px}
+  .list:not(.compact) .src{font-size:11px;padding:4px 8px}
+  .list:not(.compact) .ribbon{margin:10px -12px -12px;padding:7px 12px;font-size:11.5px}
+  .list:not(.compact) .ribbon .l svg{display:none}
+  .nav{margin:0 16px calc(12px + env(safe-area-inset-bottom));padding:8px 10px;border:0;border-radius:32px;background:#26302B;gap:6px}
+  .nav button{flex-direction:column;gap:2px;font-size:11px;color:#A6ABA3;padding:8px 6px;border-radius:24px}
+  .nav button[aria-current=page]{background:var(--lime);color:var(--dk)}
+  .nav button.wt::after{position:absolute;margin:-26px -30px 0 0}
+}
 </style>
 </head>
 <body>
@@ -986,11 +1105,12 @@ function renderList() {
   }
   const emptyTxt = { open: 'Tidak ada tiket baru.<br>Chat masuk dari semua aplikasi akan muncul di sini.', progress: 'Belum ada tiket yang sedang ditangani.', resolved: 'Belum ada tiket yang selesai.' }[tab];
   $('#view').innerHTML = `<div class="screen">
-    <div class="hero"><div class="row"><div class="grow"><span class="cap"><img src="comet.png" alt="">Comet</span><h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
+    <div class="hero"><div class="row"><div class="grow"><span class="cap"><img src="comet.png" alt="">Comet</span>${isDesk() && detailVisible() ? '<button class="alltk" data-act="all">← Semua tiket</button>' : ''}<h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
     <div class="pull"><div class="tabs" role="tablist">${['open', 'progress', 'resolved'].map(k => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${STATUS[k]}<span class="n">${cnt(k)}</span>${k === 'progress' ? `<i class="wd${pool.some(waiting) ? ' on' : ''}" aria-hidden="true"></i>` : ''}</button>`).join('')}</div></div>
     <div class="chips" aria-label="Filter aplikasi sumber"><button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua aplikasi</button>${Object.keys(APPS).map(k => `<button class="fc" style="--c:${appOf(k).c}" data-src="${k}" aria-pressed="${src === k}"><i></i>${esc(appOf(k).name)}</button>`).join('')}</div>
+    ${bridgeBanner() ? `<div style="padding:12px 16px 0">${bridgeBanner()}</div>` : ''}
     <div class="vt"><span>${total} tiket</span><span class="seg2" role="group" aria-label="Tampilan daftar"><button data-lay="card" aria-pressed="${LAYOUT === 'card'}">Kartu</button><button data-lay="list" aria-pressed="${LAYOUT === 'list'}">List</button></span></div>
-    <div class="list${LAYOUT === 'list' ? ' compact' : ''}">${items.length ? (listHtml || items.map(card).join('')) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`}${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}</div>
+    <div class="list${LAYOUT === 'list' || (isDesk() && detailVisible()) ? ' compact' : ''}">${items.length ? (listHtml || items.map(card).join('')) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`}${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}</div>
     ${MODE === 'demo' ? `<button class="demo" data-act="sim-new"><b>DEMO</b> · ${tab === 'progress' ? 'Simulasi customer membalas' : 'Simulasi chat masuk'}</button>` : ''}
   </div>`;
 }
@@ -1026,51 +1146,108 @@ function renderDetail() {
 }
 
 const greet = () => { const h = new Date().getHours(); return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam'; };
-function renderDash() {
-  const T = S.tickets, c = k => T.filter(t => t.status === k).length, now = Date.now(), P = per * 864e5;
-  const res = T.filter(t => t.status === 'resolved'), withIp = T.filter(t => t.inProgressAt != null);
-  const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
-  const late = T.filter(t => t.status === 'open' && now - t.createdAt > SLA_CRIT).length;
-  const longest = T.filter(t => t.status === 'open').map(t => now - t.createdAt).sort((a, b) => b - a)[0];
+const isDesk = () => $('#app').classList.contains('desk');
+const gridMode = () => isDesk() && view !== 'dash' && !detailVisible();
+const isShp = t => t.app === 'shopee' || t.app === 'dk' || isSB(t.id);
+function bridgeBanner() {
+  let m = '';
+  if (MODE === 'live' && !conn) m = 'Koneksi ke server terputus. Mencoba lagi…';
+  else if (MODE === 'live' && SB_OK && BRIDGES.length && !BRIDGES.some(b => b.status === 'online'))
+    m = BRIDGES.some(b => b.status === 'login_required') ? 'Shopee: login ulang Duoke. Chat Shopee baru belum masuk ke Comet.' : 'Penghubung Shopee offline. Chat Shopee baru belum masuk ke Comet.';
+  return m ? `<div class="bnr" role="alert"><i></i><span>${m}</span></div>` : '';
+}
+const timerOf = t => {
+  const d = durs(t, Date.now()), kind = t.status === 'open' ? 'open' : t.status === 'progress' ? 'prog' : 'total';
+  const lbl = t.status === 'open' ? 'menunggu' : t.status === 'progress' ? 'ditangani' : 'total';
+  return `<span class="timer" data-t="${t.id}:${kind}" data-sla="${t.status === 'open' ? t.id : ''}"><small>${lbl}</small><span class="v">${fmt(d[kind])}</span></span>`;
+};
+function trow(t) {
+  const last = t.msgs[t.msgs.length - 1], w = waiting(t);
+  return `<button class="trow${w ? ' wait' : ''}${isWide() && t.id === current ? ' sel' : ''}" data-open="${t.id}"><span class="tc1"><b>${esc(t.cust)}</b><small>${t.id}</small></span><span>${srcPill(t.app)}</span><span class="tsn">${esc(last ? last.t : (t.snip || ''))}</span><span>${badge(t.status)}</span>${timerOf(t)}</button>`;
+}
+function renderGrid() {
+  const pool = S.tickets.filter(t => src === 'all' || t.app === src);
+  const cnt = k => pool.filter(t => t.status === k).length;
+  let items = pool.filter(t => t.status === tab);
+  items.sort((x, y) => tab === 'resolved' ? y.resolvedAt - x.resolvedAt : (tab === 'progress' ? (lastInfo(y).at || 0) - (lastInfo(x).at || 0) : x.createdAt - y.createdAt));
+  const total = items.length; if (tab === 'resolved') items = items.slice(0, 30);
+  const now = Date.now(), opens = S.tickets.filter(t => t.status === 'open').sort((x, y) => x.createdAt - y.createdAt), oldest = opens[0];
+  const late = opens.filter(t => now - t.createdAt > SLA_CRIT);
+  const emptyTxt = { open: 'Tidak ada tiket baru.<br>Chat masuk dari semua aplikasi akan muncul di sini.', progress: 'Belum ada tiket yang sedang ditangani.', resolved: 'Belum ada tiket yang selesai.' }[tab];
+  const body = items.length ? (LAYOUT === 'list'
+    ? `<div class="gtable"><div class="th"><span>Pelanggan</span><span>Sumber</span><span>Pesan terakhir</span><span>Status</span><span>Waktu</span></div>${items.map(trow).join('')}</div>`
+    : `<div class="ggrid">${items.map(card).join('')}</div>`) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`;
+  const sc = $('#pane .screen'), y0 = sc ? sc.scrollTop : 0;
+  $('#pane').innerHTML = `<div class="screen gridv">
+    <header class="gh"><div class="grow"><h1>Tiket Customer</h1><span class="gs">${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</span></div>
+      <button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></header>
+    ${bridgeBanner()}
+    <div class="gbody"><div class="gmain">
+      <div class="gtools"><div class="tabs" role="tablist">${['open', 'progress', 'resolved'].map(k => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${STATUS[k]}<span class="n">${cnt(k)}</span>${k === 'progress' ? `<i class="wd${pool.some(waiting) ? ' on' : ''}" aria-hidden="true"></i>` : ''}</button>`).join('')}</div>
+        <span class="seg2" role="group" aria-label="Tampilan daftar"><button data-lay="card" aria-pressed="${LAYOUT === 'card'}">Kartu</button><button data-lay="list" aria-pressed="${LAYOUT === 'list'}">List</button></span></div>
+      <div class="chips" aria-label="Filter aplikasi sumber" style="padding:12px 0 4px"><button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua aplikasi</button>${Object.keys(APPS).map(k => `<button class="fc" style="--c:${appOf(k).c}" data-src="${k}" aria-pressed="${src === k}"><i></i>${esc(appOf(k).name)}</button>`).join('')}</div>
+      <div class="vt" style="padding:8px 2px 12px"><span>${total} tiket · urut ${tab === 'open' ? 'SLA paling mendesak' : 'terbaru'}</span></div>
+      ${body}
+      ${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}
+      ${MODE === 'demo' ? `<button class="demo" data-act="sim-new"><b>DEMO</b> · ${tab === 'progress' ? 'Simulasi customer membalas' : 'Simulasi chat masuk'}</button>` : ''}
+    </div>
+    <aside class="gaside"><div class="gcard"><h3>Antrean tertua</h3>${oldest ? `<div class="oq"><b>${esc(oldest.cust)}</b><small>${oldest.id} · ${esc(appOf(oldest.app).name)}</small><p>${esc(oldest.snip || (oldest.msgs[0] && oldest.msgs[0].t) || '')}</p>${timerOf(oldest)}</div><button class="solve" data-open="${oldest.id}">Ambil tiket tertua</button>` : '<p class="hint">Tidak ada tiket Open. Antrean kosong.</p>'}</div>
+      <div class="gcard"><div class="gch"><h3>Lewat SLA</h3><span class="chip-bad">${late.length}</span></div>${late.length ? late.slice(0, 4).map(t => `<button class="lrow" data-open="${t.id}"><span><b>${esc(t.cust)}</b><small>${esc(catN(t.cat))}</small></span><span class="dl up">+${fmt(now - t.createdAt - SLA_CRIT)}</span></button>`).join('') : '<p class="hint">Semua tiket masih dalam batas SLA.</p>'}</div></aside></div>
+  </div>`;
+  const s2 = $('#pane .screen'); if (s2) s2.scrollTop = y0;
+}
 
+function renderDash() {
+  const T = S.tickets, c = k => T.filter(t => t.status === k).length, now = Date.now(), D = Number(per) || 7, P = D * 864e5;
+  const opens = T.filter(t => t.status === 'open').sort((a, b) => a.createdAt - b.createdAt), oldest = opens[0];
+  const late = opens.filter(t => now - t.createdAt > SLA_CRIT);
   const cur = T.filter(t => t.createdAt >= now - P), prev = T.filter(t => t.createdAt >= now - 2 * P && t.createdAt < now - P);
   const count = (arr, f) => arr.reduce((m, t) => { const k = f(t); m[k] = (m[k] || 0) + 1; return m; }, {});
-  const c1 = count(cur, t => t.cat), c0 = count(prev, t => t.cat);
-  const rows = CAT_ORDER.map(k => ({ k, n: c1[k] || 0, p: c0[k] || 0 })).filter(r => r.n > 0).sort((a, b) => b.n - a.n || b.p - a.p);
+  const frs = cur.filter(t => t.inProgressAt != null).map(t => t.inProgressAt - t.createdAt).sort((a, b) => a - b);
+  const median = frs.length ? frs[Math.floor(frs.length / 2)] : null;
+  const den = cur.filter(t => t.inProgressAt != null || (t.status === 'open' && now - t.createdAt > SLA_CRIT));
+  const okN = den.filter(t => t.inProgressAt != null && t.inProgressAt - t.createdAt <= SLA_CRIT).length;
+  const pct = den.length ? Math.round(okN / den.length * 100) : 100;
+  const dIn = prev.length ? Math.round((cur.length - prev.length) / prev.length * 100) : null;
+  const doneN = cur.filter(t => t.status === 'resolved').length, donePct = cur.length ? Math.round(doneN / cur.length * 100) : 0;
+  const c1 = count(cur, t => t.cat);
+  const rows = CAT_ORDER.map(k => ({ k, n: c1[k] || 0 })).filter(r => r.n > 0).sort((a, b) => b.n - a.n).slice(0, 5);
   const maxN = Math.max(1, ...rows.map(r => r.n));
-  const rise = rows.filter(r => r.n - r.p > 0 && r.n >= 3).sort((a, b) => (b.n - b.p) - (a.n - a.p))[0];
-  const plabel = per === '1' ? '24 jam terakhir' : '7 hari terakhir', pprev = per === '1' ? '24 jam sebelumnya' : '7 hari sebelumnya';
-  const delta = r => r.p === 0 ? '<span class="dl nw">baru</span>' : r.n > r.p ? `<span class="dl up">▲ ${r.n - r.p}</span>` : r.n < r.p ? `<span class="dl dn">▼ ${r.p - r.n}</span>` : '<span class="dl eq">sama</span>';
-  const insight = rise
-    ? `<b>${catN(rise.k)}</b> naik paling tajam: ${rise.n} tiket, ${rise.p === 0 ? 'sebelumnya belum ada' : `naik ${rise.n - rise.p} dari ${pprev}`}.`
-    : 'Belum ada kategori komplain yang naik berarti dibanding periode sebelumnya.';
-  const perApp = Object.keys(APPS).map(k => {
-    const a = cur.filter(t => t.app === k), cc = count(a, t => t.cat);
-    const top = Object.entries(cc).sort((x, y) => y[1] - x[1]).slice(0, 2);
-    return `<div class="ap"><div class="t">${srcPill(k)}<b>${a.length}<span style="font-size:12px;font-weight:600;color:var(--mu)"> tiket</span></b></div>
-      <div class="m">${top.length ? 'Terbanyak:' + top.map(([ck, n]) => `<span class="flag">${FLAG}${catN(ck)} · ${n}</span>`).join('') : 'Belum ada komplain'}</div></div>`;
-  }).join('');
-  rightEl().innerHTML = `<div class="screen">
-    <div class="hero hd"><img class="lg2" src="comet.png" alt=""><span class="gr">${greet()}, ${esc(((CFG && CFG.agent) || 'Agent').split(/\s+/)[0])}</span><h1 class="big">${c('open')} tiket menunggu</h1><p>${late} sudah lewat SLA · ${c('progress')} ditangani · ${c('resolved')} selesai</p></div>
-    <div class="dbody" style="margin-top:-26px">
-    <div class="seg" role="group" aria-label="Periode"><button data-per="1" aria-pressed="${per === '1'}">24 jam</button><button data-per="7" aria-pressed="${per === '7'}">7 hari</button></div>
-    <div class="tiles"><div class="tile t-open"><b>${c('open')}</b><small>Open</small></div><div class="tile t-progress"><b>${c('progress')}</b><small>In Progress</small></div><div class="tile t-resolved"><b>${c('resolved')}</b><small>Resolved</small></div></div>
-    <div class="dgrid">
-    <div class="box"><h2>Tren komplain</h2><p class="sub">${plabel} · dibanding ${pprev}</p>
-      <div class="insight"><svg class="i" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>${insight}</span></div>
-      ${rows.length ? rows.map(r => `<div class="tr"><div class="lbl">${FLAG}${catN(r.k)}</div><div class="num">${r.n}${delta(r)}</div><div class="trk"><i style="width:${Math.max(4, r.n / maxN * 100)}%"></i></div></div>`).join('') : '<div class="empty">Belum ada komplain di periode ini.</div>'}</div>
-    <div class="box"><h2>Komplain per aplikasi</h2><p class="sub">${plabel}</p>${perApp}</div>
-    <div class="box"><h2>Kecepatan penanganan</h2><p class="sub">Semua tiket</p>
-      <div class="stat"><span>Rata-rata total selesai</span><b>${fmtLong(avg(res.map(t => t.resolvedAt - t.createdAt)))}</b></div>
-      <div class="stat"><span>Rata-rata menunggu dibuka</span><b>${fmtLong(avg(withIp.map(t => t.inProgressAt - t.createdAt)))}</b></div>
-      <div class="stat"><span>Open terlama saat ini</span><b data-longest>${longest == null ? '—' : fmtLong(longest)}</b></div></div>
+  const nd = Math.min(14, Math.max(7, D)), startDay = new Date(); startDay.setHours(0, 0, 0, 0);
+  const days = []; for (let i = nd - 1; i >= 0; i--) { const t0 = startDay.getTime() - i * 864e5, t1 = t0 + 864e5, inD = T.filter(t => t.createdAt >= t0 && t.createdAt < t1); days.push({ l: new Date(t0).getDate(), a: inD.filter(isShp).length, b: inD.filter(t => !isShp(t)).length }); }
+  const maxD = Math.max(1, ...days.map(d => d.a + d.b));
+  const hrs = []; for (let h = 8; h < 20; h++) hrs.push({ h, n: cur.filter(t => new Date(t.createdAt).getHours() === h).length });
+  const maxH = Math.max(1, ...hrs.map(x => x.n)), peak = hrs.slice().sort((x, y) => y.n - x.n)[0];
+  const plabel = D === 1 ? '24 jam terakhir' : D + ' hari terakhir';
+  const segs = opens.slice(0, 4).map(t => { const w = now - t.createdAt; return w > SLA_CRIT ? '#E0948A' : w > SLA_WARN ? '#E8C676' : '#C4DD8C'; });
+  const perApp = Object.keys(APPS).map(k => { const n = cur.filter(t => t.app === k).length; return { k, n }; }).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
+  const maxA = Math.max(1, ...perApp.map(x => x.n));
+  rightEl().innerHTML = `<div class="screen dashv">
+    <div class="dtop"><h1>Dashboard</h1><span class="gs">${plabel} · ${MODE === 'demo' ? 'data contoh' : 'data langsung'}</span><div class="seg2" role="group" aria-label="Periode">${[['1', 'Hari ini'], ['7', '7 hari'], ['14', '14 hari'], ['30', '30 hari']].map(([v, l]) => `<button data-per="${v}" aria-pressed="${per === v}">${l}</button>`).join('')}</div></div>
+    ${bridgeBanner()}
+    <div class="bento">
+      <div class="bhero"><img class="lg2" src="comet.png" alt=""><span class="gr">${greet()}, ${esc(((CFG && CFG.agent) || 'Agent').split(/\s+/)[0])}</span><h2 class="big">${opens.length} tiket menunggu</h2><p>${late.length} sudah lewat SLA · ${c('progress')} ditangani${median != null ? ' · respon median ' + fmt(median) : ''}</p>
+        <div class="bh-f"><div class="segs">${segs.length ? segs.map(x => `<i style="background:${x}"></i>`).join('') : '<i style="background:#44544B"></i>'}</div>${oldest ? `<button class="bbtn" data-open="${oldest.id}">Ambil tiket tertua</button>` : ''}</div></div>
+      <div class="bcard bring"><div class="ring" style="background:conic-gradient(#A8CC63 0 ${pct * 3.6}deg,#E4E9DE ${pct * 3.6}deg 360deg)"><div><b>${pct}%</b></div></div><div class="rt"><b>Dalam SLA ${Math.round(SLA_CRIT / 60e3)} menit</b><span>${okN} dari ${den.length} tiket direspons tepat waktu</span><small>Target tim 95%</small></div></div>
+      <div class="bcard kpi k1"><span>Tiket masuk</span><b>${cur.length}</b><em>${dIn == null ? 'belum ada pembanding' : (dIn >= 0 ? '+' : '') + dIn + '% vs periode lalu'}</em></div>
+      <div class="bcard kpi"><span>Respon pertama (median)</span><b>${median == null ? '—' : fmt(median)}</b><em>${frs.length} tiket diambil</em></div>
+      <div class="bcard kpi k3"><span>Tiket selesai</span><b>${doneN}</b><div class="pb"><i style="width:${donePct}%"></i></div><em>${donePct}% dari tiket masuk</em></div>
+      <div class="bcard bbar"><div class="bch"><b>Tiket masuk per hari</b><span class="lgd"><i style="background:#6F8579"></i>Shopee<i style="background:#C4DD8C"></i>Aplikasi</span></div>
+        <div class="bars">${days.map(d => `<div class="bc"><div class="bs" style="height:${d.b / maxD * 150}px;background:#C4DD8C"></div><div class="bs" style="height:${d.a / maxD * 150}px;background:#6F8579"></div></div>`).join('')}</div>
+        <div class="bl">${days.map(d => `<span>${d.l}</span>`).join('')}</div></div>
+      <aside class="bside"><div class="bcard"><div class="bch"><b>Lewat SLA</b><span class="chip-bad">${late.length} tiket</span></div>${late.length ? late.slice(0, 3).map(t => `<button class="lrow" data-open="${t.id}"><span><b>${esc(t.cust)}</b><small>${esc(catN(t.cat))}</small></span><span class="dl up">+${fmt(now - t.createdAt - SLA_CRIT)}</span></button>`).join('') : '<p class="hint">Semua tiket masih dalam batas SLA.</p>'}</div>
+        <div class="bcard"><b>Per aplikasi</b>${perApp.length ? perApp.map(x => `<div class="cr"><div><span>${esc(appOf(x.k).name)}</span><b>${x.n}</b></div><i><u style="width:${x.n / maxA * 100}%"></u></i></div>`).join('') : '<p class="hint">Belum ada tiket.</p>'}</div>
+        <button class="solve" data-nav="list">Lihat semua tiket</button></aside>
+      <div class="bcard bcat"><b>Kategori masalah</b>${rows.length ? rows.map(r => `<div class="cr"><div><span>${esc(catN(r.k))}</span><b>${r.n}</b></div><i><u style="width:${r.n / maxN * 100}%"></u></i></div>`).join('') : '<p class="hint">Belum ada komplain di periode ini.</p>'}</div>
+      <div class="bcard bhr"><div class="bch"><b>Jam sibuk</b><span class="hint">${peak && peak.n ? 'Puncak ' + String(peak.h).padStart(2, '0') + '.00' : 'Belum ada data'}</span></div><div class="hs">${hrs.map(x => `<div><i style="background:rgba(139,176,84,${(0.12 + x.n / maxH * 0.6).toFixed(2)})">${x.n}</i><span>${String(x.h).padStart(2, '0')}</span></div>`).join('')}</div></div>
     </div>
-    ${MODE === 'demo' ? '<p class="fine">Data di mode demo hanya contoh dan tersimpan di perangkat ini.</p><button class="demo" data-act="reset">Reset data demo</button>' : `<p class="fine">Masuk sebagai ${esc(CFG.agent)}. Angka dihitung dari semua tiket di sheet.</p>`}
-    <button class="demo" data-act="logout">${MODE === 'demo' ? 'Keluar dari demo' : 'Keluar'}</button></div>
+    ${MODE === 'demo' ? '<p class="fine">Data di mode demo hanya contoh dan tersimpan di perangkat ini.</p><button class="demo" data-act="reset">Reset data demo</button>' : `<p class="fine">Masuk sebagai ${esc(CFG.agent)}.</p>`}
+    <button class="demo" data-act="logout">${MODE === 'demo' ? 'Keluar dari demo' : 'Keluar'}</button>
   </div>`;
 }
 
 function renderListKeep() {
+  if (gridMode()) { renderGrid(); return; }
   const sc = $('#view .screen'), y = sc ? sc.scrollTop : 0;
   renderList();
   const s2 = $('#view .screen'); if (s2) s2.scrollTop = y;
@@ -1081,6 +1258,7 @@ function render() {
   const w = !full && window.matchMedia('(min-width:768px)').matches;
   $('#app').classList.toggle('wide', w);
   $('#app').classList.toggle('desk', w && window.matchMedia('(min-width:1100px)').matches);
+  $('#app').classList.toggle('gm', w && window.matchMedia('(min-width:1100px)').matches && (view === 'dash' || !detailVisible()));
   $('#nav').style.display = (full || (!w && view === 'detail')) ? 'none' : 'flex';
   document.querySelectorAll('#nav button,#rail [data-nav]').forEach(b => b.removeAttribute('aria-current'));
   if (!full) document.querySelectorAll(`#nav [data-nav="${view === 'dash' ? 'dash' : 'list'}"],#rail [data-nav="${view === 'dash' ? 'dash' : 'list'}"]`).forEach(b => b.setAttribute('aria-current', 'page'));
@@ -1091,7 +1269,7 @@ function render() {
   $('#app').classList.toggle('dv', !full && w && view !== 'dash' && !!current && !!find(current));
   if (view === 'login') return renderLogin();
   if (view === 'boot') return renderBoot('Menyambung ke server…', false);
-  if (w) { renderListKeep(); if (view === 'dash') renderDash(); else renderDetail(); return; }
+  if (w) { renderListKeep(); if (view === 'dash') renderDash(); else if (!gridMode()) renderDetail(); return; }
   if (view === 'list') renderList(); else if (view === 'dash') renderDash(); else renderDetail();
 }
 window.matchMedia('(min-width:768px)').addEventListener('change', () => render());
@@ -1217,13 +1395,13 @@ document.addEventListener('click', e => {
   if (b.dataset.lay) { LAYOUT = b.dataset.lay === 'list' ? 'list' : 'card'; try { localStorage.setItem('comet-layout', LAYOUT); } catch (e) {} return isWide() ? renderListKeep() : render(); }
   if (b.dataset.src) { src = b.dataset.src; return isWide() ? renderListKeep() : render(); }
   if (b.dataset.per) { per = b.dataset.per; return isWide() ? renderDash() : render(); }
-  if (b.dataset.nav) return go(b.dataset.nav === 'dash' ? 'dash' : 'list');
+  if (b.dataset.nav) { if (isDesk() && b.dataset.nav !== 'dash') current = null; return go(b.dataset.nav === 'dash' ? 'dash' : 'list'); }
   const a = b.dataset.act;
   if (a === 'sim-new') simNew(); else if (a === 'sim-again') simAgain(); else if (a === 'solve') solve();
   else if (a === 'send') reply($('#reply').value);
   else if (a === 'rs-open') rsOpen(); else if (a === 'rs-go') rsGo(); else if (a === 'rs-copy') rsCopy(); else if (a === 'rs-send') rsSend();
   else if (a === 'cust-retry') { const t = find(current); if (t) { CUST[t.id] = { loading: true }; const el = $('#cust'); if (el) el.outerHTML = custHtml(t); delete CUST[t.id]; loadCust(t, true); } }
-  else if (a === 'nebula') toast('Nebula AI segera hadir: membalas chat otomatis'); else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'upd-install') installUpdate(); else if (a === 'login') login(); else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
+  else if (a === 'all') { current = null; go('list'); } else if (a === 'nebula') toast('Nebula AI segera hadir: membalas chat otomatis'); else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'upd-install') installUpdate(); else if (a === 'login') login(); else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
   else if (a === 'reset') { S = seed(); save(); tab = 'open'; src = 'all'; toast('Data demo direset'); render(); }
 });
 document.addEventListener('change', e => {
