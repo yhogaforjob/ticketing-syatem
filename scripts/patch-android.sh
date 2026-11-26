@@ -17,7 +17,7 @@ fi
 # 3. Warna status bar dan navigation bar
 STYLES="$RES/values/styles.xml"
 if grep -q 'android:background">@null' "$STYLES" && ! grep -q statusBarColor "$STYLES"; then
-  sed -i 's|<item name="android:background">@null</item>|<item name="android:background">@null</item>\n        <item name="android:statusBarColor">#0A4D43</item>\n        <item name="android:navigationBarColor">#FFFFFF</item>|' "$STYLES"
+  sed -i 's|<item name="android:background">@null</item>|<item name="android:background">@null</item>\n        <item name="android:statusBarColor">#1F2A25</item>\n        <item name="android:navigationBarColor">#FFFFFF</item>|' "$STYLES"
 else
   echo "PERINGATAN: styles.xml tidak diubah (pola tidak ditemukan atau sudah ada)" >&2
 fi

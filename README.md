@@ -1,4 +1,4 @@
-# Tiket Duta Kasir
+# Comet (Tiket Duta Kasir)
 
 Aplikasi tiket sisi agent untuk menangani chat bantuan customer dari aplikasi-aplikasi Duta Kasir.
 Satu kode (`www/index.html`) dipakai untuk web dan APK Android (dibungkus Capacitor).
