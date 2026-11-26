@@ -1065,12 +1065,12 @@ async function login() {
     // email terdaftar yang belum punya akun: login pertama sekaligus membuat akun dengan kata sandi ini
     const first = !(await sbRpc('comet_has_account', { p_email: email }));
     if (first && pass.length < 8) return lgFail('Login pertama: kata sandi minimal 8 karakter.');
-    let res = first ? await sbAuth('signup', { email, password: pass }) : await sbAuth('token?grant_type=password', { email, password: pass });
+    let res = first ? await sbAuth('signup' + (/^https?:/.test(location.origin) ? '?redirect_to=' + encodeURIComponent(location.origin) : ''), { email, password: pass }) : await sbAuth('token?grant_type=password', { email, password: pass });
     if (first && res.ok && !res.j.access_token) res = await sbAuth('token?grant_type=password', { email, password: pass });
     if (!res.ok || !res.j.access_token) {
       const m = String(res.j.msg || res.j.error_description || res.j.message || res.j.error_code || '');
       if (/already|registered|exists/i.test(m)) return lgFail('Email ini sudah punya kata sandi. Silakan masuk.');
-      if (/confirm/i.test(m)) return lgFail('Email belum dikonfirmasi. Cek kotak masuk email Anda.');
+      if (/confirm/i.test(m)) return lgFail('<b>Satu langkah lagi.</b> Kami mengirim email konfirmasi ke ' + esc(email) + '. Klik tautannya, lalu kembali ke sini dan tekan Masuk.');
       return lgFail(first ? 'Gagal membuat akun. ' + esc(m) : 'Email atau kata sandi salah.');
     }
     const se = await sbRpc('comet_session', {}, res.j.access_token);
