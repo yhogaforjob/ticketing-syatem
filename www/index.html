@@ -1058,17 +1058,20 @@ async function login() {
   const email = ($('#lg-email').value || '').trim().toLowerCase(), pass = $('#lg-pass').value || '';
   CFG_LAST.email = email; try { localStorage.setItem('comet-last', JSON.stringify({ email })); } catch (e) {}
   if (!/^\S+@\S+\.\S+$/.test(email)) return lgFail('Isi email yang valid.');
-  if (pass.length < (LG_MODE === 'up' ? 8 : 1)) return lgFail(LG_MODE === 'up' ? 'Kata sandi minimal 8 karakter.' : 'Isi kata sandi.');
+  if (!pass) return lgFail('Isi kata sandi.');
   const b = $('[data-act="login"]'); b.disabled = true; b.textContent = 'Memeriksa…';
   try {
     if (!(await sbRpc('comet_allowed', { p_email: email }))) return lgFail('<b>Akun belum terdaftar.</b> Gunakan email yang didaftarkan admin Nusavera.');
-    let res = LG_MODE === 'up' ? await sbAuth('signup', { email, password: pass }) : await sbAuth('token?grant_type=password', { email, password: pass });
-    if (LG_MODE === 'up' && res.ok && !res.j.access_token) res = await sbAuth('token?grant_type=password', { email, password: pass });
+    // email terdaftar yang belum punya akun: login pertama sekaligus membuat akun dengan kata sandi ini
+    const first = !(await sbRpc('comet_has_account', { p_email: email }));
+    if (first && pass.length < 8) return lgFail('Login pertama: kata sandi minimal 8 karakter.');
+    let res = first ? await sbAuth('signup', { email, password: pass }) : await sbAuth('token?grant_type=password', { email, password: pass });
+    if (first && res.ok && !res.j.access_token) res = await sbAuth('token?grant_type=password', { email, password: pass });
     if (!res.ok || !res.j.access_token) {
       const m = String(res.j.msg || res.j.error_description || res.j.message || res.j.error_code || '');
       if (/already|registered|exists/i.test(m)) return lgFail('Email ini sudah punya kata sandi. Silakan masuk.');
       if (/confirm/i.test(m)) return lgFail('Email belum dikonfirmasi. Cek kotak masuk email Anda.');
-      return lgFail(LG_MODE === 'up' ? 'Gagal membuat kata sandi. ' + esc(m) : 'Email atau kata sandi salah.');
+      return lgFail(first ? 'Gagal membuat akun. ' + esc(m) : 'Email atau kata sandi salah.');
     }
     const se = await sbRpc('comet_session', {}, res.j.access_token);
     if (!se || !se.ok) return lgFail(se && se.code === 'no_key' ? 'Akun sudah terdaftar, tetapi belum dihubungkan ke sistem tiket. Hubungi admin.' : '<b>Akun belum terdaftar.</b> Gunakan email yang didaftarkan admin Nusavera.');
@@ -1220,8 +1223,6 @@ function renderLogin() {
       <label class="hint" for="lg-pass">Kata sandi</label>
       <div class="cin"><input id="lg-pass" type="password" autocomplete="${up ? 'new-password' : 'current-password'}" placeholder="${up ? 'Minimal 8 karakter' : '••••••••'}" enterkeyhint="go"></div>
       <button class="solve" type="button" data-act="login">${up ? 'Buat kata sandi & masuk' : 'Masuk'}</button>
-      <button class="lnk3" type="button" data-act="lg-mode">${up ? 'Sudah punya kata sandi? Masuk' : 'Pertama kali? Buat kata sandi'}</button>
-      <p class="fine">Hanya akun yang didaftarkan admin yang bisa masuk.</p>
     </div></div>
   </div></div>`;
 }
