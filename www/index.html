@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1F2A25">
+<meta name="theme-color" content="#111111">
 <title>Comet</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -12,8 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#EDF0EA; --cd:#FFFFFF; --tx:#1F2823; --mu:#6F766F; --ln:#E3E8DD;
-  --pri:#2E4A3C; --dk:#26302B; --dk2:#33443B; --lime:#C4DD8C; --mint:#EEF3E8; --sub:#D3DDCE;
+  --bg:#F5F6F4; --cd:#FFFFFF; --tx:#111111; --mu:#6B7068; --ln:#E8EAE6;
+  --pri:#111111; --dk:#111111; --dk2:#222622; --lime:#B7F23C; --mint:#F2F3F0; --sub:#C3C8C0;
   --bad:#B42318; --bad-bg:#FEE4E2; --ok:#166534; --ok-bg:#DCFCE7; --warn:#92400E; --warn-bg:#FEF3C7;
   --sh:0 1px 2px rgba(31,40,35,.05), 0 8px 24px rgba(31,40,35,.06);
 }
@@ -531,24 +531,159 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke
   .nav button[aria-current=page]{background:var(--lime);color:var(--dk)}
   .nav button.wt::after{position:absolute;margin:-26px -30px 0 0}
 }
+
+/* ===== Comet v3: disamakan dengan canvas (palet hitam + lime, frame, kartu) ===== */
+body{background:#EEF0EC;color:#111}
+.hero{background:#fff;color:#111;border-radius:0;border-bottom:1px solid var(--ln);padding:calc(14px + env(safe-area-inset-top)) 16px 14px}
+.hero::after{display:none}
+.hero .name,.dh .name{color:#111}.hero .meta,.dh .meta{color:var(--mu)}
+.back{background:#fff;border:1px solid var(--ln);color:#111}
+.panel{margin:12px 16px 0;box-shadow:none;background:var(--bg)}
+.panel .hl{background:var(--lime);color:#111}
+.mh{padding:calc(16px + env(safe-area-inset-top)) 16px 4px;background:#fff}
+.mh1{display:flex;align-items:center;gap:10px}
+.mh1 img{width:34px;height:34px}.mh1 h1{margin:0;font-size:22px;font-weight:800;letter-spacing:-.01em}
+.mh1 .cpill{margin-left:auto}.mh1 .bell{background:#fff;border:1px solid var(--ln);color:#111;width:38px;height:38px}
+.mh1 .cpill+.bell{margin-left:0}.mh1 h1+.bell{margin-left:auto}
+.mh1 .bell .dot{border-color:#fff}
+.mh2{margin:6px 0 0;font-size:12.5px;color:var(--mu);font-weight:600}
+.alltk{color:#111;background:var(--bg);border-radius:99px;padding:6px 12px;margin:10px 0 0;display:inline-block}
+.cpill{height:36px;padding:0 13px;border-radius:99px;border:1px solid var(--ln);background:#fff;font-size:12.5px;font-weight:700;display:inline-flex;gap:7px;align-items:center;white-space:nowrap;color:#111}
+.cpill i{width:8px;height:8px;border-radius:50%}
+.left .screen,.left #view{background:#fff}
+.pull{margin:12px 16px 0}
+.tabs{background:var(--bg);box-shadow:none;border-radius:99px;padding:4px}
+.tab{border-radius:99px}
+.tab[aria-selected=true]{background:#111;color:#fff}
+.tab .n{background:#fff;color:#111}
+.tab[aria-selected=true] .n{background:var(--lime);color:#111}
+.chips{padding:12px 16px 2px}
+.fc{height:36px;padding:0 6px 0 14px;border:1px solid var(--ln);border-radius:99px;font-weight:600;font-size:13px;gap:8px;background:#fff}
+.fc .cn{background:var(--mint);font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px}
+.fc[aria-pressed=true]{background:#111;color:#fff;border-color:#111;font-weight:600}
+.fc[aria-pressed=true] .cn{background:var(--lime);color:#111}
+.seg2{background:var(--mint);border:0}
+.seg2 button[aria-pressed=true]{background:#111;color:#fff}
+.solve{background:var(--lime);color:#111;border-radius:99px}
+.btn.pri{background:var(--lime);color:#111;border-radius:99px}
+.send{background:#111}
+.msg.a{background:var(--lime);color:#111}
+.msg.c{background:var(--mint);box-shadow:none}
+.toast{background:#111;color:#fff}
+.card.sel,.app.wide .card.sel,.app.desk .card.sel{outline:2px solid #111}
+.card.wait,.app.desk .card.wait{background:#111;border-color:#111}
+.trow.wait{background:#111}
+.nbub{background:#111}
+.rail .rb[aria-current=page]{background:var(--lime);color:#111}
+/* kartu canvas */
+.kc{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--ln);border-radius:18px;padding:8px;text-align:left;width:100%;transition:border-color .12s,transform .12s}
+.kc:hover{border-color:#C9CEC6}.kc:active{transform:scale(.99)}
+.kp{position:relative;height:124px;border-radius:12px;background:var(--mint);padding:12px;overflow:hidden}
+.ktag{position:absolute;left:0;top:0;font-size:11px;font-weight:700;padding:5px 10px;border-radius:12px 0 12px 0;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kun{position:absolute;right:10px;top:8px;background:var(--lime);color:#111;font-size:11px;font-weight:800;min-width:22px;height:22px;border-radius:99px;display:grid;place-items:center;padding:0 6px}
+.km{margin-top:28px;display:flex;gap:8px;align-items:flex-start}
+.kav{width:28px;height:28px;flex:none;border-radius:50%;background:#DDF59A;color:#2F5200;font-size:12px;font-weight:800;display:grid;place-items:center}
+.kb{background:#fff;border-radius:4px 12px 12px 12px;padding:8px 10px;font-size:12.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#111}
+.kn{padding:0 6px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kn b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kn small{font-size:12px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kw{padding:0 6px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--mu);font-variant-numeric:tabular-nums}
+.kw svg.i{width:14px;height:14px}
+.kw.warn{color:#B54708}.kw.crit,.kw.crit2{color:#D92D20}
+.kbtn{height:34px;border-radius:10px;border:1px solid var(--ln);display:grid;place-items:center;font-size:13px;font-weight:700;color:#111}
+.kc.wait{border-color:#111;box-shadow:0 0 0 1px #111}
+.kc.wait .kbtn{background:#111;color:#fff;border-color:#111}
+.kgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:6px 16px 16px}
+.kgrid .kp{height:108px;padding:10px}.kgrid .kav{display:none}.kgrid .km{margin-top:26px}.kgrid .kb{-webkit-line-clamp:3}
+.kgrid .kbtn{display:none}.kgrid .kc{padding:6px;gap:8px}.kgrid .kw{padding-bottom:6px}
+.kgrid .empty,.kgrid .more,.kgrid .sec{grid-column:1/-1}
+@media (min-width:601px){.kgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}}
+/* nav HP: pil hitam */
+.nav{margin:0 16px calc(12px + env(safe-area-inset-bottom));height:68px;padding:0 8px;border:0;border-radius:32px;background:#111;gap:4px;align-items:center}
+.nav button{flex:1;flex-direction:column;gap:2px;font-size:11px;color:#A6ABA3;padding:0 6px;height:52px;border-radius:26px;position:relative}
+.nav button svg.i{width:22px;height:22px}
+.nav button[aria-current=page]{background:var(--lime);color:#111}
+.nav button.wt::after{position:absolute;top:8px;right:calc(50% - 18px);margin:0;background:var(--lime);box-shadow:0 0 0 2px #111}
+.nav button[aria-current=page].wt::after{background:#111;box-shadow:0 0 0 2px var(--lime)}
+.nfab{bottom:96px}
+/* login sesuai canvas */
+.lg{background:#fff}
+.lgl .glow{background:radial-gradient(closest-side,rgba(232,90,43,.30),rgba(232,90,43,0))}
+.gl{color:#B7F23C}
+.lgl .chp span.ai{background:rgba(183,242,60,.14);border-color:rgba(183,242,60,.6);color:#CFF56A}
+.lgf .hint{display:block;font-size:13px;font-weight:600;color:#111;margin:0 0 6px}
+.lgf .cin{margin:0 0 14px}
+.lgf .cin input{height:50px;border-radius:12px;border:1px solid #D5D8D2;font-size:15px;background:#fff}
+.lgf .cin input[aria-invalid=true]{border-color:#D92D20}
+.lgf .solve{height:52px;padding:0;font-size:15px;margin-top:4px}
+.lgerr{padding:12px 14px;border-radius:12px;background:#FDE8E6;border:1px solid #D92D20;font-size:13px;line-height:1.5;margin:0 0 16px;color:#111}
+.lgerr b{color:#B42318}
+.lnk3{display:block;width:100%;text-align:center;margin:14px 0 4px;font-weight:700;font-size:13.5px;color:#111;text-decoration:underline;text-underline-offset:3px}
+.lgf .fine{text-align:left;padding:8px 0 0;font-size:12px}
+@media (min-width:900px){
+  .lgwrap{background:#EEF0EC;padding:24px}
+  .lg{min-height:calc(100dvh - 48px);background:#111;border-radius:28px;padding:8px;gap:8px}
+  .lgl{border-radius:22px;background:#161816}
+  .lgr{background:#fff;border-radius:22px}
+}
+@media (min-width:1100px){
+  body{background:#EEF0EC;padding:24px}
+  .app,.app.desk{height:calc(100dvh - 48px);border-radius:28px;background:#111;padding:8px 8px 8px 0}
+  .app.lgm{background:transparent;padding:0;height:calc(100dvh - 48px)}
+  .app.lgm .lgwrap{background:transparent;padding:0}
+  .app.lgm .lg{min-height:calc(100dvh - 48px)}
+  .app.desk .rail{background:transparent;width:64px;padding:14px 0;gap:8px}
+  .rail .logo{width:40px;height:40px;margin-bottom:14px}.rail .logo img{width:40px;height:40px}
+  .rail .rb{width:44px;height:44px;color:#8A8F88}
+  .rail .rb span{display:none}
+  .rail .rb.out{color:#FF8F6B}
+  .app.desk .left{border-radius:22px 0 0 22px;overflow:hidden;border-right:1px solid var(--ln)}
+  .app.desk .pane{border-radius:0 22px 22px 0;overflow:hidden;background:#fff}
+  .app.desk.gm .pane{border-radius:22px}
+  .app.desk .dside{background:var(--bg);border-left:0;margin:0 16px 16px 0;border-radius:18px}
+  .app.desk .dmain>.hero{background:#fff}
+  .app.desk .thread{background:#fff}
+  .app.desk .composer{border-top:1px solid var(--ln)}
+  .app.desk .cin input{background:var(--bg)}
+  .gridv{padding:0 24px 24px}
+  .gh{height:76px;padding:0}
+  .gh .cpill{margin-right:4px}
+  .gtools .tabs{width:auto}
+  .ggrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gcard{background:var(--bg);border-radius:18px}
+  .gcard .solve{height:50px;padding:0}
+  .app.desk:not(.gm) .left .mh{padding:16px 16px 4px}
+  .app.desk:not(.gm) .left .mh1 img{width:28px;height:28px}.app.desk:not(.gm) .left .mh1 h1{font-size:18px}
+  .app.desk:not(.gm) .left .mh1 .cpill,.app.desk:not(.gm) .left .mh1 .bell{display:none}
+  .app.desk .list.compact .card{border-radius:14px;background:#fff}
+  .app.desk .list.compact .card.wait{background:#111}
+  .nfab{right:28px;bottom:28px}
+}
+/* dashboard tetap lembut (disetujui) */
+.dashv{--lime:#C4DD8C;--pri:#2E4A3C}
+.dashv .seg2 button[aria-pressed=true]{background:#2E4A3C}
+@media (prefers-reduced-motion:reduce){.kc{transition:none}}
 </style>
 </head>
 <body>
 <div class="app" id="app">
   <aside class="rail" id="rail" aria-label="Menu">
     <div class="logo" aria-hidden="true"><img src="comet.png" alt=""></div>
-    <button class="rb" data-nav="list"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Tiket</button>
-    <button class="rb" data-nav="dash"><svg class="i" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Dashboard</button>
+    <button class="rb" data-nav="list" title="Inbox" aria-label="Inbox"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></svg><span>Inbox</span></button>
+    <button class="rb" data-nav="dash" title="Dashboard" aria-label="Dashboard"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-3"/></svg><span>Dashboard</span></button>
+    <button class="rb" data-act="soon" data-what="Halaman Agen" title="Agen" aria-label="Agen"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6"/></svg><span>Agen</span></button>
+    <button class="rb" data-act="conn" title="Penghubung Shopee" aria-label="Penghubung Shopee"><svg class="i" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span>Penghubung</span></button>
+    <button class="rb" data-act="soon" data-what="Pengaturan" title="Pengaturan" aria-label="Pengaturan"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg><span>Pengaturan</span></button>
     <div class="sp"></div>
-    <button class="bell" data-act="bell" aria-label="Notifikasi"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button>
-    <button class="rb" data-act="logout" title="Keluar"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Keluar</button>
-    <div class="ava" id="rail-ava" aria-hidden="true"></div>
+    <button class="rb out" data-act="logout" title="Keluar" aria-label="Keluar"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Keluar</span></button>
+    <div class="ava" id="rail-ava" aria-hidden="true" style="display:none"></div>
   </aside>
   <div class="left">
   <div id="view"></div>
   <nav class="nav" id="nav" aria-label="Navigasi utama">
-    <button data-nav="list"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Tiket</button>
-    <button data-nav="dash"><svg class="i" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Dashboard</button>
+    <button data-nav="list"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></svg>Inbox</button>
+    <button data-nav="dash"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-3"/></svg>Dashboard</button>
+    <button data-act="soon" data-what="Halaman Agen"><svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6"/></svg>Agen</button>
+    <button data-act="menu"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Pengaturan</button>
   </nav>
   </div>
   <div class="pane" id="pane"></div>
@@ -775,7 +910,8 @@ const API = 'https://n8n-wy6olg9sfchs.jkt2.sumopod.my.id/webhook/tiket-agen';
 const CFG_KEY = 'ticketing-live-cfg';
 const POLL_LIST = 5000, POLL_MSG = 2000; // pengecekan 'same' ringan (tanpa baca Sheets), jadi aman dipercepat
 let CFG = (() => { try { return JSON.parse(localStorage.getItem(CFG_KEY)); } catch (e) { return null; } })();
-let MODE = !CFG ? 'login' : CFG.demo ? 'demo' : 'live';
+if (CFG && (CFG.demo || !CFG.email)) { CFG = null; try { localStorage.removeItem(CFG_KEY); } catch (e) {} }
+let MODE = !CFG ? 'login' : 'live';
 let loaded = false, listSig = '', conn = true, listBusy = false, detBusy = false;
 const seen = new Set(), busy = new Set();
 const saveCfg = () => { try { localStorage.setItem(CFG_KEY, JSON.stringify(CFG)); } catch (e) {} };
@@ -905,17 +1041,41 @@ async function bootLive() {
     initLive(m); go('list');
   } catch (e) { renderBoot('Tidak bisa terhubung ke server.', true); }
 }
+const CFG_LAST = (() => { try { return JSON.parse(localStorage.getItem('comet-last') || '{}'); } catch (e) { return {}; } })();
+async function sbAuth(path, body) {
+  const r = await fetch(SB_URL + '/auth/v1/' + path, { method: 'POST', headers: { apikey: SB_ANON, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  let j = {}; try { j = await r.json(); } catch (e) {}
+  return { ok: r.ok, j };
+}
+async function sbRpc(fn, body, token) {
+  const r = await fetch(SB_URL + '/rest/v1/rpc/' + fn, { method: 'POST', headers: { apikey: SB_ANON, Authorization: 'Bearer ' + (token || SB_ANON), 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+  if (!r.ok) throw new Error('http ' + r.status);
+  return r.json();
+}
+function lgFail(msg) { LG_ERR = msg; renderLogin(); const p = $('#lg-pass'); if (p) p.focus(); }
 async function login() {
-  const agent = ($('#lg-name').value.trim() || 'Agent').slice(0, 40), key = $('#lg-key').value.trim();
-  if (!key) { toast('Isi kunci agent dulu'); return; }
+  const email = ($('#lg-email').value || '').trim().toLowerCase(), pass = $('#lg-pass').value || '';
+  CFG_LAST.email = email; try { localStorage.setItem('comet-last', JSON.stringify({ email })); } catch (e) {}
+  if (!/^\S+@\S+\.\S+$/.test(email)) return lgFail('Isi email yang valid.');
+  if (pass.length < (LG_MODE === 'up' ? 8 : 1)) return lgFail(LG_MODE === 'up' ? 'Kata sandi minimal 8 karakter.' : 'Isi kata sandi.');
   const b = $('[data-act="login"]'); b.disabled = true; b.textContent = 'Memeriksa…';
-  CFG = { key, agent };
   try {
+    if (!(await sbRpc('comet_allowed', { p_email: email }))) return lgFail('<b>Akun belum terdaftar.</b> Gunakan email yang didaftarkan admin Nusavera.');
+    let res = LG_MODE === 'up' ? await sbAuth('signup', { email, password: pass }) : await sbAuth('token?grant_type=password', { email, password: pass });
+    if (LG_MODE === 'up' && res.ok && !res.j.access_token) res = await sbAuth('token?grant_type=password', { email, password: pass });
+    if (!res.ok || !res.j.access_token) {
+      const m = String(res.j.msg || res.j.error_description || res.j.message || res.j.error_code || '');
+      if (/already|registered|exists/i.test(m)) return lgFail('Email ini sudah punya kata sandi. Silakan masuk.');
+      if (/confirm/i.test(m)) return lgFail('Email belum dikonfirmasi. Cek kotak masuk email Anda.');
+      return lgFail(LG_MODE === 'up' ? 'Gagal membuat kata sandi. ' + esc(m) : 'Email atau kata sandi salah.');
+    }
+    const se = await sbRpc('comet_session', {}, res.j.access_token);
+    if (!se || !se.ok) return lgFail(se && se.code === 'no_key' ? 'Akun sudah terdaftar, tetapi belum dihubungkan ke sistem tiket. Hubungi admin.' : '<b>Akun belum terdaftar.</b> Gunakan email yang didaftarkan admin Nusavera.');
+    CFG = { key: se.key, agent: se.agent, email: se.email };
     const m = await api('meta');
-    if (m.ok) { saveCfg(); MODE = 'live'; initLive(m); go('list'); return; }
-    CFG = null; toast(m.code === 'key' ? 'Kunci agent salah' : 'Server menolak permintaan');
-  } catch (e) { CFG = null; conn = true; toast('Tidak bisa terhubung ke server'); }
-  b.disabled = false; b.textContent = 'Masuk';
+    if (m.ok) { LG_ERR = ''; saveCfg(); MODE = 'live'; initLive(m); go('list'); return; }
+    CFG = null; return lgFail('Server tiket menolak akun ini. Hubungi admin.');
+  } catch (e) { CFG = null; conn = true; return lgFail('Tidak bisa terhubung ke server. Coba lagi.'); }
 }
 
 async function refreshList() {
@@ -1041,8 +1201,10 @@ function meteorsHtml() {
   }
   return h;
 }
+let LG_MODE = 'in', LG_ERR = '';
 function renderLogin() {
-  $('#view').innerHTML = `<div class="screen"><div class="lg">
+  const up = LG_MODE === 'up';
+  $('#view').innerHTML = `<div class="screen lgwrap"><div class="lg">
     <div class="lgl"><div class="glow"></div>${meteorsHtml()}
       <div class="brand"><img src="comet.png" alt="">Comet</div>
       <div class="hl"><div class="gj"><h1><span class="ln">Resolve at the</span><span class="gl" data-t="Speed of Light"><span class="gb">Speed of Light</span></span></h1></div>
@@ -1050,14 +1212,15 @@ function renderLogin() {
         <div class="chp"><span>E-commerce</span><span>Website</span><span>Aplikasi</span><span class="ai">✦ AI-powered</span></div></div>
     </div>
     <div class="lgr"><div class="lgf">
-      <h2>Masuk ke Comet</h2><p class="sb">Akses khusus tim Nusavera.</p>
-      <label class="hint" for="lg-name" style="font-weight:700">Nama agent</label>
-      <div class="cin" style="margin:6px 0 14px"><input id="lg-name" type="text" autocomplete="off" placeholder="Contoh: Yhoga"></div>
-      <label class="hint" for="lg-key" style="font-weight:700">Kunci agent</label>
-      <div class="cin" style="margin:6px 0 16px"><input id="lg-key" type="password" autocomplete="off" placeholder="Kunci agent" enterkeyhint="go"></div>
-      <button class="solve" type="button" data-act="login">Masuk</button>
-      <p class="fine" style="margin-top:12px">Kunci agent hanya disimpan di perangkat ini.</p>
-      <button class="demo" data-act="demo-start" style="box-shadow:none;border:1px solid var(--ln)">Coba <b>mode demo</b> tanpa server</button>
+      <h2>${up ? 'Buat kata sandi' : 'Masuk ke Comet'}</h2><p class="sb">${up ? 'Pertama kali masuk? Buat kata sandi untuk email terdaftar.' : 'Akses khusus tim Nusavera.'}</p>
+      ${LG_ERR ? `<div class="lgerr" role="alert">${LG_ERR}</div>` : ''}
+      <label class="hint" for="lg-email">Email</label>
+      <div class="cin"><input id="lg-email" type="email" autocomplete="username" placeholder="nama@gmail.com" value="${esc((CFG_LAST.email) || '')}"${LG_ERR ? ' aria-invalid="true"' : ''}></div>
+      <label class="hint" for="lg-pass">Kata sandi</label>
+      <div class="cin"><input id="lg-pass" type="password" autocomplete="${up ? 'new-password' : 'current-password'}" placeholder="${up ? 'Minimal 8 karakter' : '••••••••'}" enterkeyhint="go"></div>
+      <button class="solve" type="button" data-act="login">${up ? 'Buat kata sandi & masuk' : 'Masuk'}</button>
+      <button class="lnk3" type="button" data-act="lg-mode">${up ? 'Sudah punya kata sandi? Masuk' : 'Pertama kali? Buat kata sandi'}</button>
+      <p class="fine">Hanya akun yang didaftarkan admin yang bisa masuk.</p>
     </div></div>
   </div></div>`;
 }
@@ -1105,12 +1268,12 @@ function renderList() {
   }
   const emptyTxt = { open: 'Tidak ada tiket baru.<br>Chat masuk dari semua aplikasi akan muncul di sini.', progress: 'Belum ada tiket yang sedang ditangani.', resolved: 'Belum ada tiket yang selesai.' }[tab];
   $('#view').innerHTML = `<div class="screen">
-    <div class="hero"><div class="row"><div class="grow"><span class="cap"><img src="comet.png" alt="">Comet</span>${isDesk() && detailVisible() ? '<button class="alltk" data-act="all">← Semua tiket</button>' : ''}<h1>Tiket Customer</h1><p>${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</p></div><button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></div></div>
+    <header class="mh"><div class="mh1"><img src="comet.png" alt=""><h1>Inbox</h1>${connPill()}<button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button></div>${isDesk() && detailVisible() ? '<button class="alltk" data-act="all">← Semua tiket</button>' : ''}<p class="mh2">${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}</p></header>
     <div class="pull"><div class="tabs" role="tablist">${['open', 'progress', 'resolved'].map(k => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${STATUS[k]}<span class="n">${cnt(k)}</span>${k === 'progress' ? `<i class="wd${pool.some(waiting) ? ' on' : ''}" aria-hidden="true"></i>` : ''}</button>`).join('')}</div></div>
-    <div class="chips" aria-label="Filter aplikasi sumber"><button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua aplikasi</button>${Object.keys(APPS).map(k => `<button class="fc" style="--c:${appOf(k).c}" data-src="${k}" aria-pressed="${src === k}"><i></i>${esc(appOf(k).name)}</button>`).join('')}</div>
+    <div class="chips" aria-label="Filter aplikasi sumber">${srcChips()}</div>
     ${bridgeBanner() ? `<div style="padding:12px 16px 0">${bridgeBanner()}</div>` : ''}
-    <div class="vt"><span>${total} tiket</span><span class="seg2" role="group" aria-label="Tampilan daftar"><button data-lay="card" aria-pressed="${LAYOUT === 'card'}">Kartu</button><button data-lay="list" aria-pressed="${LAYOUT === 'list'}">List</button></span></div>
-    <div class="list${LAYOUT === 'list' || (isDesk() && detailVisible()) ? ' compact' : ''}">${items.length ? (listHtml || items.map(card).join('')) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`}${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}</div>
+    <div class="vt"><span>${total} tiket · urut ${tab === 'open' ? 'SLA mendesak' : 'terbaru'}</span><span class="seg2" role="group" aria-label="Tampilan daftar"><button data-lay="card" aria-pressed="${LAYOUT === 'card'}">Kartu</button><button data-lay="list" aria-pressed="${LAYOUT === 'list'}">List</button></span></div>
+    <div class="list${LAYOUT === 'list' || (isDesk() && detailVisible()) ? ' compact' : ' kgrid'}">${items.length ? (LAYOUT !== 'list' && !(isDesk() && detailVisible()) ? items.map(kcard).join('') : (listHtml || items.map(card).join(''))) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`}${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}</div>
     ${MODE === 'demo' ? `<button class="demo" data-act="sim-new"><b>DEMO</b> · ${tab === 'progress' ? 'Simulasi customer membalas' : 'Simulasi chat masuk'}</button>` : ''}
   </div>`;
 }
@@ -1147,6 +1310,26 @@ function renderDetail() {
 
 const greet = () => { const h = new Date().getHours(); return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam'; };
 const isDesk = () => $('#app').classList.contains('desk');
+function srcChips() {
+  const n = k => S.tickets.filter(t => t.status === tab && (k === 'all' || t.app === k)).length;
+  const keys = Object.keys(APPS).filter(k => n(k) > 0 || k === src);
+  return `<button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua <span class="cn">${n('all')}</span></button>` + keys.map(k => `<button class="fc" data-src="${k}" aria-pressed="${src === k}">${esc(appOf(k).name)} <span class="cn">${n(k)}</span></button>`).join('');
+}
+function connPill() {
+  if (MODE !== 'live' || !SB_OK || !BRIDGES.length) return '';
+  const on = BRIDGES.some(b => b.status === 'online'), lg = BRIDGES.some(b => b.status === 'login_required');
+  return `<button class="cpill" data-act="conn"><i style="background:${on ? '#2DB36B' : '#D92D20'}"></i>${on ? 'Shopee tersambung' : lg ? 'Shopee: login ulang' : 'Shopee terputus'}</button>`;
+}
+function kcard(t) {
+  const d = durs(t, Date.now()), last = t.msgs[t.msgs.length - 1], w = waiting(t), un = w && unread(t), pd = w ? pend(t) : null;
+  const kind = t.status === 'open' ? 'open' : t.status === 'progress' ? 'prog' : 'total';
+  const a = appOf(t.app), ini = esc((t.cust || '?').trim().charAt(0).toUpperCase());
+  const tm = w ? `<span class="kw crit2" data-t="${t.id}:wait"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>membalas · <span class="v">${fmt(Date.now() - pd.since)}</span></span>`
+    : `<span class="kw" data-t="${t.id}:${kind}" data-sla="${t.status === 'open' ? t.id : ''}"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${t.status === 'open' ? 'menunggu' : t.status === 'progress' ? 'ditangani' : 'selesai'} <span class="v">${fmt(d[kind])}</span></span>`;
+  return `<button class="kc${w ? ' wait' : ''}" data-open="${t.id}" aria-label="Tiket ${t.id} dari ${esc(t.cust)}, ${esc(a.name)}, ${STATUS[t.status]}">
+    <div class="kp"><span class="ktag" style="background:${a.b};color:${a.c}">${esc(a.name)}</span>${un ? `<span class="kun">${pd.n > 99 ? '99+' : pd.n}</span>` : ''}<div class="km"><span class="kav">${ini}</span><div class="kb">${esc(last ? last.t : (t.snip || ''))}</div></div></div>
+    <div class="kn"><b>${esc(t.cust)}</b><small>${esc(catN(t.cat))} · ${t.id}</small></div>${tm}<span class="kbtn">Buka chat</span></button>`;
+}
 const gridMode = () => isDesk() && view !== 'dash' && !detailVisible();
 const isShp = t => t.app === 'shopee' || t.app === 'dk' || isSB(t.id);
 function bridgeBanner() {
@@ -1176,16 +1359,16 @@ function renderGrid() {
   const emptyTxt = { open: 'Tidak ada tiket baru.<br>Chat masuk dari semua aplikasi akan muncul di sini.', progress: 'Belum ada tiket yang sedang ditangani.', resolved: 'Belum ada tiket yang selesai.' }[tab];
   const body = items.length ? (LAYOUT === 'list'
     ? `<div class="gtable"><div class="th"><span>Pelanggan</span><span>Sumber</span><span>Pesan terakhir</span><span>Status</span><span>Waktu</span></div>${items.map(trow).join('')}</div>`
-    : `<div class="ggrid">${items.map(card).join('')}</div>`) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`;
+    : `<div class="ggrid">${items.map(kcard).join('')}</div>`) : `<div class="empty">${MODE === 'live' && !loaded ? 'Memuat tiket…' : emptyTxt}</div>`;
   const sc = $('#pane .screen'), y0 = sc ? sc.scrollTop : 0;
   $('#pane').innerHTML = `<div class="screen gridv">
-    <header class="gh"><div class="grow"><h1>Tiket Customer</h1><span class="gs">${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}${MODE === 'live' && !conn ? ' · offline' : ''}${bridgeTxt()}</span></div>
+    <header class="gh"><div class="grow"><h1>Inbox</h1><span class="gs">${cnt('open')} menunggu · ${cnt('progress')} ditangani${src === 'all' ? '' : ' · ' + esc(appOf(src).name)}</span></div>${connPill()}
       <button class="bell${upd ? ' has' : ''}" data-act="bell" aria-label="${upd ? 'Notifikasi: versi baru tersedia' : 'Notifikasi: tidak ada pembaruan'}"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><i class="dot"></i></button><div class="ava" aria-hidden="true">${esc(initials())}</div></header>
     ${bridgeBanner()}
     <div class="gbody"><div class="gmain">
       <div class="gtools"><div class="tabs" role="tablist">${['open', 'progress', 'resolved'].map(k => `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${STATUS[k]}<span class="n">${cnt(k)}</span>${k === 'progress' ? `<i class="wd${pool.some(waiting) ? ' on' : ''}" aria-hidden="true"></i>` : ''}</button>`).join('')}</div>
         <span class="seg2" role="group" aria-label="Tampilan daftar"><button data-lay="card" aria-pressed="${LAYOUT === 'card'}">Kartu</button><button data-lay="list" aria-pressed="${LAYOUT === 'list'}">List</button></span></div>
-      <div class="chips" aria-label="Filter aplikasi sumber" style="padding:12px 0 4px"><button class="fc" data-src="all" aria-pressed="${src === 'all'}">Semua aplikasi</button>${Object.keys(APPS).map(k => `<button class="fc" style="--c:${appOf(k).c}" data-src="${k}" aria-pressed="${src === k}"><i></i>${esc(appOf(k).name)}</button>`).join('')}</div>
+      <div class="chips" aria-label="Filter aplikasi sumber" style="padding:12px 0 4px">${srcChips()}</div>
       <div class="vt" style="padding:8px 2px 12px"><span>${total} tiket · urut ${tab === 'open' ? 'SLA paling mendesak' : 'terbaru'}</span></div>
       ${body}
       ${tab === 'resolved' && total > items.length ? `<div class="more">Menampilkan ${items.length} dari ${total} tiket terbaru</div>` : ''}
@@ -1246,6 +1429,10 @@ function renderDash() {
   </div>`;
 }
 
+function openMenu() {
+  $('#sheet').innerHTML = `<h3 id="sh-t">Pengaturan</h3><p>Masuk sebagai <b>${esc((CFG && CFG.email) || '')}</b>${CFG && CFG.agent ? ' · ' + esc(CFG.agent) : ''}.</p><button class="btn pri" data-act="bell">Cek pembaruan aplikasi</button><button class="btn sec" data-act="logout" style="color:#B42318">Keluar</button><button class="btn sec" data-act="upd-close">Tutup</button>`;
+  $('#ovl').classList.add('show');
+}
 function renderListKeep() {
   if (gridMode()) { renderGrid(); return; }
   const sc = $('#view .screen'), y = sc ? sc.scrollTop : 0;
@@ -1257,6 +1444,7 @@ function render() {
   const full = view === 'login' || view === 'boot';
   const w = !full && window.matchMedia('(min-width:768px)').matches;
   $('#app').classList.toggle('wide', w);
+  $('#app').classList.toggle('lgm', full);
   $('#app').classList.toggle('desk', w && window.matchMedia('(min-width:1100px)').matches);
   $('#app').classList.toggle('gm', w && window.matchMedia('(min-width:1100px)').matches && (view === 'dash' || !detailVisible()));
   $('#nav').style.display = (full || (!w && view === 'detail')) ? 'none' : 'flex';
@@ -1401,7 +1589,7 @@ document.addEventListener('click', e => {
   else if (a === 'send') reply($('#reply').value);
   else if (a === 'rs-open') rsOpen(); else if (a === 'rs-go') rsGo(); else if (a === 'rs-copy') rsCopy(); else if (a === 'rs-send') rsSend();
   else if (a === 'cust-retry') { const t = find(current); if (t) { CUST[t.id] = { loading: true }; const el = $('#cust'); if (el) el.outerHTML = custHtml(t); delete CUST[t.id]; loadCust(t, true); } }
-  else if (a === 'all') { current = null; go('list'); } else if (a === 'nebula') toast('Nebula AI segera hadir: membalas chat otomatis'); else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'upd-install') installUpdate(); else if (a === 'login') login(); else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
+  else if (a === 'soon') toast((b.dataset.what || 'Fitur ini') + ' segera hadir'); else if (a === 'conn') toast(bridgeTxt().replace(/<[^>]+>/g, '').replace(/^ · /, '') || 'Status penghubung Shopee belum tersedia'); else if (a === 'menu') openMenu(); else if (a === 'all') { current = null; go('list'); } else if (a === 'nebula') toast('Nebula AI segera hadir: membalas chat otomatis'); else if (a === 'bell') openSheet(); else if (a === 'upd-close') closeSheet(); else if (a === 'upd-install') installUpdate(); else if (a === 'login') login(); else if (a === 'lg-mode') { LG_MODE = LG_MODE === 'up' ? 'in' : 'up'; LG_ERR = ''; renderLogin(); } else if (a === 'demo-start') startDemo(); else if (a === 'logout') logout(); else if (a === 'retry') bootLive();
   else if (a === 'reset') { S = seed(); save(); tab = 'open'; src = 'all'; toast('Data demo direset'); render(); }
 });
 document.addEventListener('change', e => {
@@ -1413,7 +1601,7 @@ document.addEventListener('change', e => {
 // Kirim pakai Enter. Sengaja tanpa <form>: jendela preview yang disandbox memblokir submit form.
 document.addEventListener('keydown', e => {
   if (e.target.id === 'reply' && e.key === 'Enter' && !e.isComposing) { e.preventDefault(); reply(e.target.value); }
-  if ((e.target.id === 'lg-key' || e.target.id === 'lg-name') && e.key === 'Enter' && !e.isComposing) { e.preventDefault(); login(); }
+  if ((e.target.id === 'lg-pass' || e.target.id === 'lg-email') && e.key === 'Enter' && !e.isComposing) { e.preventDefault(); login(); }
 });
 
 /* ======================= TIMER BERJALAN (dari timestamp) ======================= */
