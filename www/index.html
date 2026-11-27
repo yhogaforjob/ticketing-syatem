@@ -1199,7 +1199,7 @@ window.cometGoogle = (t, v) => {
   if (t === 'ok') { try { return gExch(JSON.parse(v).idToken); } catch (e) {} }
   gBusy(false);
   if (t === 'cancel') return;
-  lgFail(t === 'nocred' ? 'Tidak ada akun Google di HP ini. Tambahkan akun Google di Pengaturan HP, lalu coba lagi.' : 'Login Google gagal (' + esc(v || t) + '). Coba lagi atau masuk dengan email.');
+  lgFail(t === 'nocred' ? '<b>Android tidak memberikan akun Google ke Comet.</b> Biasanya karena aplikasi ini belum didaftarkan di Google Cloud (client OAuth Android). Sementara, masuk dengan email dan kata sandi.' : 'Login Google gagal (' + esc(v || t) + '). Coba lagi atau masuk dengan email.');
 };
 function gNative() {
   if (!window.CometNative || !CometNative.googleSignIn) return toast('Login Google butuh versi aplikasi terbaru. Perbarui lewat lonceng.');

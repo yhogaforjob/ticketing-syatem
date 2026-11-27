@@ -63,6 +63,7 @@ import androidx.credentials.exceptions.GetCredentialException;
 import androidx.credentials.exceptions.NoCredentialException;
 import com.getcapacitor.BridgeActivity;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import org.json.JSONObject;
 
@@ -83,14 +84,22 @@ public class MainActivity extends BridgeActivity {
     }
 
     // Login Google lewat Credential Manager (sama dengan Duta Kasir): menghasilkan ID token untuk Supabase
-    private void googleSignIn(final String webClientId) {
+    // Langkah 1: lembar akun Google (GetGoogleIdOption). Kalau Android menjawab "tidak ada kredensial",
+    // langkah 2: alur tombol "Sign in with Google" (GetSignInWithGoogleOption) yang selalu menampilkan pemilih akun.
+    private void googleSignIn(final String webClientId) { googleSignIn(webClientId, false); }
+    private void googleSignIn(final String webClientId, final boolean button) {
         try {
-            GetGoogleIdOption opt = new GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false)
-                .setServerClientId(webClientId)
-                .setAutoSelectEnabled(false)
-                .build();
-            GetCredentialRequest req = new GetCredentialRequest.Builder().addCredentialOption(opt).build();
+            GetCredentialRequest req;
+            if (button) {
+                req = new GetCredentialRequest.Builder().addCredentialOption(new GetSignInWithGoogleOption.Builder(webClientId).build()).build();
+            } else {
+                GetGoogleIdOption opt = new GetGoogleIdOption.Builder()
+                    .setFilterByAuthorizedAccounts(false)
+                    .setServerClientId(webClientId)
+                    .setAutoSelectEnabled(false)
+                    .build();
+                req = new GetCredentialRequest.Builder().addCredentialOption(opt).build();
+            }
             CredentialManager.create(this).getCredentialAsync(this, req, null, ContextCompat.getMainExecutor(this),
                 new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
                     @Override
@@ -110,8 +119,9 @@ public class MainActivity extends BridgeActivity {
                     @Override
                     public void onError(GetCredentialException e) {
                         if (e instanceof GetCredentialCancellationException) pushG("cancel", "");
-                        else if (e instanceof NoCredentialException) pushG("nocred", "");
-                        else pushG("err", String.valueOf(e.getType()));
+                        else if (e instanceof NoCredentialException && !button) googleSignIn(webClientId, true);
+                        else if (e instanceof NoCredentialException) pushG("nocred", String.valueOf(e.getMessage()));
+                        else pushG("err", e.getType() + (e.getMessage() == null ? "" : ": " + e.getMessage()));
                     }
                 });
         } catch (Exception e) { pushG("err", String.valueOf(e.getMessage())); }
