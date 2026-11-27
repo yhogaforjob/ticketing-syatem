@@ -41,6 +41,22 @@ Di detail tiket (mode live) ada kartu **Pelanggan**: usaha, paket, lisensi (sama
 Tombol **Buat kode reset PIN** (aksi `reset`) meminta agent mencentang minimal 2 data yang cocok dengan pelanggan, lalu membuat kode 6 angka (30 menit, sekali pakai) yang bisa disalin atau dikirim ke chat.
 Perangkat yang belum terdaftar (Duta Kasir di bawah v0.2.24) tidak punya data, jadi tombolnya tidak muncul. Butuh workflow n8n satu flow `n8n-workflow-dutakasir-satu-flow.json` (repo duta_kasir, folder docs/ticketing).
 
+## Login
+
+Dua cara, keduanya hanya untuk email di tabel `comet_access` (Supabase):
+- **Email + kata sandi** (Supabase Auth).
+- **Masuk dengan Google (SSO)**, alur sama dengan Duta Kasir: Google memberi ID token → `auth/v1/token?grant_type=id_token` → `comet_session`.
+  Web memakai Google Identity Services, APK memakai Credential Manager (jembatan `CometNative`). Client ID web sama dengan Duta Kasir.
+  Syarat di Google Cloud (project yang sama dengan client ID web):
+  - Client OAuth **Web**: tambahkan `https://ticketing-syatem.vercel.app` di *Authorized JavaScript origins*.
+  - Client OAuth **Android**: package `id.dutakasir.tiket`, SHA-1 `9C:57:8C:21:27:08:0A:10:C1:17:E1:6E:F4:14:EB:9D:45:58:B7:0B` (dari `signing/tiket.keystore`).
+
+## Tetap sinkron di web
+
+Daftar tiket disimpan di perangkat, jadi saat tab dibuka lagi inbox langsung tampil lalu disegarkan di belakang.
+Saat tab tidak dilihat, pengecekan tetap jalan (±15 detik, browser bisa memperlambatnya sampai ±1 menit) dan pesan baru ditandai lewat
+angka di judul tab, bunyi singkat, dan notifikasi desktop (izin diminta saat klik pertama).
+
 ## Memasang APK
 
 1. Buka halaman **Releases** repo ini, rilis **APK terbaru**.

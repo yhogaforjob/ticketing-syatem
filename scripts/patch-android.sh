@@ -49,7 +49,22 @@ cat > "$JAVA/MainActivity.java" <<'JAVA'
 package id.dutakasir.tiket;
 
 import android.os.Bundle;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+import androidx.core.content.ContextCompat;
+import androidx.credentials.Credential;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
+import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.NoCredentialException;
 import com.getcapacitor.BridgeActivity;
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+import org.json.JSONObject;
 
 public class MainActivity extends BridgeActivity {
     @Override
@@ -57,6 +72,56 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(ApkInstaller.class);
         registerPlugin(NotifBg.class);
         super.onCreate(savedInstanceState);
+        getBridge().getWebView().addJavascriptInterface(new CometNative(), "CometNative");
+    }
+
+    // Hasil login Google ke web: window.cometGoogle(tipe, nilai). Nilai dikutip lewat JSONObject.quote.
+    private void pushG(final String type, final String val) {
+        final WebView wv = getBridge().getWebView();
+        final String js = "window.cometGoogle&&cometGoogle(" + JSONObject.quote(type) + "," + JSONObject.quote(val) + ")";
+        wv.post(new Runnable() { @Override public void run() { wv.evaluateJavascript(js, null); } });
+    }
+
+    // Login Google lewat Credential Manager (sama dengan Duta Kasir): menghasilkan ID token untuk Supabase
+    private void googleSignIn(final String webClientId) {
+        try {
+            GetGoogleIdOption opt = new GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(webClientId)
+                .setAutoSelectEnabled(false)
+                .build();
+            GetCredentialRequest req = new GetCredentialRequest.Builder().addCredentialOption(opt).build();
+            CredentialManager.create(this).getCredentialAsync(this, req, null, ContextCompat.getMainExecutor(this),
+                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                    @Override
+                    public void onResult(GetCredentialResponse res) {
+                        try {
+                            Credential c = res.getCredential();
+                            if (c instanceof CustomCredential && GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL.equals(c.getType())) {
+                                GoogleIdTokenCredential g = GoogleIdTokenCredential.createFrom(((CustomCredential) c).getData());
+                                JSONObject o = new JSONObject();
+                                o.put("idToken", g.getIdToken());
+                                o.put("email", g.getId());
+                                o.put("name", g.getDisplayName() == null ? "" : g.getDisplayName());
+                                pushG("ok", o.toString());
+                            } else pushG("err", "tipe kredensial tidak dikenal");
+                        } catch (Exception e) { pushG("err", String.valueOf(e.getMessage())); }
+                    }
+                    @Override
+                    public void onError(GetCredentialException e) {
+                        if (e instanceof GetCredentialCancellationException) pushG("cancel", "");
+                        else if (e instanceof NoCredentialException) pushG("nocred", "");
+                        else pushG("err", String.valueOf(e.getType()));
+                    }
+                });
+        } catch (Exception e) { pushG("err", String.valueOf(e.getMessage())); }
+    }
+
+    public class CometNative {
+        @JavascriptInterface
+        public void googleSignIn(final String webClientId) {
+            runOnUiThread(new Runnable() { @Override public void run() { MainActivity.this.googleSignIn(webClientId); } });
+        }
     }
 }
 JAVA
@@ -73,6 +138,12 @@ VC="${GITHUB_RUN_NUMBER:-1}"
 GR=android/app/build.gradle
 sed -i -E "s/versionCode +[0-9]+/versionCode $VC/" "$GR"
 grep -q "versionCode $VC" "$GR" || echo "PERINGATAN: versionCode tidak diubah" >&2
+
+# 5c. Login Google (Credential Manager), versi sama dengan Duta Kasir
+if ! grep -q 'androidx.credentials:credentials:' "$GR"; then
+  sed -i "0,/^dependencies {/s//dependencies {\n    implementation 'androidx.credentials:credentials:1.3.0'\n    implementation 'androidx.credentials:credentials-play-services-auth:1.3.0'\n    implementation 'com.google.android.libraries.identity.googleid:googleid:1.1.1'/" "$GR"
+fi
+grep -q 'googleid:1.1.1' "$GR" || { echo "GAGAL: dependensi login Google tidak terpasang" >&2; exit 1; }
 
 # 6. Tanda tangan tetap: tanpa ini tiap build bertanda tangan beda dan Android menolak pembaruan
 mkdir -p ~/.android
